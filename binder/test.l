@@ -1,1 +1,0 @@
-int fake(){return 10;}

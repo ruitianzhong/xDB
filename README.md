@@ -2,6 +2,22 @@
 
 A DBMS implemented for Xidian University‘s compiler course
 
+## Supported SQL Example
+
+```sql
+CREATE DATABASE example;
+USE example;
+CREATE TABLE user (id int);
+SHOW TABLES;
+INSERT INTO user (id) VALUES (1);
+SELECT id from user WHERE id = 42;
+UPDATE user SET id=1 WHERE id=42;
+DELETE FROM user WHERE id=42;
+DROP TABLE user;
+```
+
+
+
 ## Build
 
 ```shell

@@ -4,7 +4,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-Wall)
 
-
 cmake_minimum_required(VERSION 3.15)
 
 project(xDB
@@ -12,15 +11,14 @@ project(xDB
         DESCRIPTION "A DBMS")
 
 add_executable(${PROJECT_NAME} main.cpp
-        binder/binder.cpp
-        test.cpp
+        sql_lexer.cpp
 )
 
 add_custom_command(
-        OUTPUT test.cpp
-        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/binder/test.l
-        COMMAND cat ${CMAKE_CURRENT_SOURCE_DIR}/binder/test.l > ${CMAKE_CURRENT_BINARY_DIR}/test.cpp
-        COMMENT "Prebuild command"
+        OUTPUT sql_lexer.cpp
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/parser/sql.l
+        COMMAND flex -o sql_lexer.cpp ${CMAKE_CURRENT_SOURCE_DIR}/parser/sql.l
+        COMMENT "Generating lexer"
         VERBATIM
 )
 
