@@ -68,16 +68,16 @@ CHAR TOKEN(CHAR)
 INSERT TOKEN(INSERT)
 IF TOKEN(IF)
 EXISTS TOKEN(EXISTS)
-
+AND TOKEN(AND)
 
 
  /* Operator */
 
-"=="
-"!="
-"<>"
-">="
-"<="
+"==" TOKEN(EQUALS)
+"!=" TOKEN(NOTEQUALS)
+"<>" TOKEN(NOTEQUALS)
+">=" TOKEN(GREATEQ)
+"<=" TOKEN(LESSEQ)
 "||"
 
 
@@ -97,7 +97,7 @@ EXISTS TOKEN(EXISTS)
 
  /* Integer number */
 
-[0-9]+ { return SQL_INTEGER; }
+[0-9]+ { return SQL_INTVAL; }
 
  /* Identifier (placed after the keyword, lower priority in other words) */
 

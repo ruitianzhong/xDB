@@ -38,6 +38,11 @@ add_custom_target(check
         pwd
 )
 
+add_custom_target(shell
+        ./xDB
+)
+add_dependencies(shell xDB)
+
 
 
 
