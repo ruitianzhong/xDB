@@ -14,6 +14,16 @@ add_executable(${PROJECT_NAME} main.cpp
         sql_lexer.cpp
         sql.tab.cpp
         sql.tab.hpp
+        include/sql/exp.h
+        include/sql/delete_stmt.h
+        include/sql/select_stmt.h
+        include/sql/insert_stmt.h
+        include/sql/drop_stmt.h
+        include/sql/update_stmt.h
+        include/sql/use_stmt.h
+        include/sql/create_stmt.h
+        include/sql/show_stmt.h
+        include/sql/stmt.h
 )
 
 add_custom_command(

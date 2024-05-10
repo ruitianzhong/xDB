@@ -192,3 +192,9 @@ int main(void)
 # -d generate bison_demo.tab.h
 bison -d bison_demo.y
 ```
+
+## Class V.S. Struct in C++
+
++ Members of a structure are public by default, while members of a class are private by default.
+
++ A structure is mainly used for grouping data, while a class is mainly used for data abstraction and inheritance.

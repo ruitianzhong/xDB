@@ -159,6 +159,10 @@ insert_value
  /****** DROP statement (example: DROP TABLE students;) ******/
  drop_statement
  : DROP TABLE opt_exists table_name ';'
+ | DROP DATABASE dbname ';'
+
+ dbname:
+ IDENTIFIER
 
  /****** SHOW (SHOW TABLES) ******/
  show_statement
