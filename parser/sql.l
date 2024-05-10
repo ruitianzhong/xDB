@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string.h>
 #include <stdio.h>
+#include "sql.tab.hpp"
 int chars = 0;
 int words = 0;
 static thread_local std::stringstream strbuf;
@@ -31,7 +32,7 @@ ID {CharFirstID}|{NumberFirstID}
 [ \t\n]+      /* skipping the whitespace */
 
  /* SQL keyword */
-CREATE ECHO;
+CREATE { return CREATE; }
 USE
 SHOW
 TABLE
@@ -113,4 +114,8 @@ NULL
 . { fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); return 0; }
 
 %%
+
+int yyerror(const char *msg) {
+    fprintf(stderr, "[SQL-Lexer-Error] %s\n",msg); return 0;
+}
 
