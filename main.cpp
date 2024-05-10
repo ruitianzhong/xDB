@@ -4,10 +4,8 @@
 #include <iostream>
 
 
-int fake();
-
-int yylex();
+int yyparse();
 
 int main(int argc, char *argv[]) {
-    return yylex();
+    return yyparse();
 }
