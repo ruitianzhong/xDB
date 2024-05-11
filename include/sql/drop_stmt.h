@@ -7,7 +7,19 @@
 #include "stmt.h"
 
 namespace xDB {
-    class DropStmt : SQLStmt {
+    enum DropType {
+        DropTable,
+        DropDatabase,
+    };
+
+    class  DropStmt : SQLStmt {
+    public:
+        explicit DropStmt(DropType type);
+
+        char *name{};
+        DropType type;
+
+    private:
     };
 }
 

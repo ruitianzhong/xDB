@@ -6,18 +6,27 @@
 #define STMT_H
 
 namespace xDB {
-    class SQLStmt {
+    enum SQLStmtType {
+        xSQL_SELECT,
+        xSQL_INSERT,
+        xSQL_UPDATE,
+        xSQL_CREATE,
+        xSQL_DELETE,
+        xSQL_DROP,
+        xSQL_USE,
+        xSQL_SHOW,
     };
 
-    enum SQLStmtType {
-        SQL_SELECT,
-        SQL_INSERT,
-        SQL_UPDATE,
-        SQL_CREATE,
-        SQL_DELETE,
-        SQL_DROP,
-        SQL_USE,
-        SQL_SHOW,
+    class SQLStmt {
+    public:
+        explicit SQLStmt(SQLStmtType type);
+
+        SQLStmtType type() const;
+
+        virtual ~SQLStmt();
+
+    private:
+        SQLStmtType type_;
     };
 }
 

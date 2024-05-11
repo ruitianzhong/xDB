@@ -8,6 +8,8 @@
 
 namespace xDB {
     enum CreateStmtType {
+        DATABASE,
+        TABLE
     };
 
     class CreateStmt : SQLStmt {

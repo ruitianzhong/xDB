@@ -103,7 +103,7 @@ AND TOKEN(AND)
 
  /*  \"[^\"\n]+\"  { printf("id: %s\n",yytext); } */
 
-[A-Za-z][A-Za-z0-9_]* { return SQL_IDENTIFIER; }
+[A-Za-z][A-Za-z0-9_]* { yylval.str = strdup(yytext); return SQL_IDENTIFIER; }
 
 
 
@@ -113,7 +113,7 @@ AND TOKEN(AND)
 \' { BEGIN(single_quoted_string); strbuf.clear();strbuf.str(""); }
 <single_quoted_string>\'\' { strbuf<<'\''; }
 <single_quoted_string>[^']* { strbuf<<yytext;}
-<single_quoted_string>\' { BEGIN(INITIAL); printf("%s\n",strbuf.str().c_str()); return SQL_STRING; }
+<single_quoted_string>\' { BEGIN(INITIAL); printf("%s\n",strbuf.str().c_str());yylval.str= strdup(strbuf.str().c_str()); return SQL_STRING; }
 
 <single_quoted_string><<EOF>> { fprintf(stderr,"[SQL-Lexer-Error] Unterminated string\n"); return 0;}
 

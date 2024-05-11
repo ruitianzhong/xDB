@@ -24,6 +24,9 @@ add_executable(${PROJECT_NAME} main.cpp
         include/sql/create_stmt.h
         include/sql/show_stmt.h
         include/sql/stmt.h
+        include/sql/stmts.h
+        sql/drop_stmt.cpp
+        sql/stmt.cpp
 )
 
 add_custom_command(

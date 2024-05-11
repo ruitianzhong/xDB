@@ -3,16 +3,27 @@
 int yylex(void);
 void yyerror(const char * s);
 %}
+
+%code requires{
+#include "sql/stmts.h"
+using namespace xDB;
+}
+
+%destructor {
+    //
+    free( ($$) );
+}<str>
+
 %define api.token.prefix {SQL_}
 
 %token CREATE USE SHOW TABLE TABLES FROM
 %token WHERE SELECT DATABASE INTO VALUES
 %token UPDATE SET DROP JOIN INNER OUTER LEFT
 %token RIGHT INT INTEGER VARCHAR AS BETWEEN
-%token DELETE IS NOT OR NULL CHAR
-%token IDENTIFIER FLOAT STRING INSERT
+%token DELETE IS NOT NULL CHAR
+%token FLOAT INSERT
 %token IF EXISTS INTVAL EQUALS NOTEQUALS GREATEQ LESSEQ AND OR
-
+%token<str> IDENTIFIER STRING
 %type select_statement
 %type insert_statement
 %type create_statement
@@ -29,11 +40,38 @@ void yyerror(const char * s);
 %type literal string_literal integer_literal
 %type update_clause_comma_list update_clause
 %type select_comma_list table_list select_comma_list_with_star
+
+%left OR
+%left AND
+%right NOT
+%nonassoc '=' EQUALS NOTEQUALS
+%nonassoc '<' '>' LESSEQ GREATEQ
+
+%nonassoc IS
+%left '+' '-'
+%left '*' '/' '%'
+%left '^'
+
+
+/* Unary Operator */
+%left '(' ')'
+%left '.'
+%left '[' ']'
+%left JOIN
+
+
 %start statements
+
+%union{
+    char * str;
+    xDB::DropStmt* drop_stmt;
+}
+
+
 
 %%
 statements
-: statements statement { printf("done"); return 0; }
+: statements statement { printf("done"); YYACCEPT; }
 | statement {}
 
 statement
@@ -46,17 +84,17 @@ statement
 | select_statement { printf("select_statement\n"); }
 | delete_statement { printf("delete_statement\n"); }
 
-table_name: IDENTIFIER
+table_name: IDENTIFIER { printf("table name is %s\n",$1);}
 
 opt_exists: IF EXISTS {}
-| /* empty */ { printf("opt");}
+| /* empty */ { }
 
 opt_column_list:
 '(' comma_list ')'
 |  {}
 
 comma_list:
-comma_list ',' IDENTIFIER
+comma_list ',' IDENTIFIER { }
 | IDENTIFIER
 
 column_name
@@ -64,7 +102,7 @@ column_name
 | IDENTIFIER '.' IDENTIFIER
 
 opt_where
-: WHERE expr {}
+: WHERE expr { }
 | {}
 
     /****** Expression ******/
@@ -99,29 +137,26 @@ unary_expr
 : '-' operand {}
 | operand IS NULL {}
 | operand IS NOT NULL {}
+| NOT operand
 
 binary_expr
 : comp_expr { }
 | operand '-' operand {}
 | operand '+' operand {}
-| operand '-' operand {}
 | operand '/' operand {}
 | operand '*' operand {}
 | operand '%' operand {}
 | operand '^' operand {}
 
-logic_expr : expr AND expr {}
-| expr OR expr
 
 
-comp_expr
-: operand EQUALS operand
+comp_expr: operand '=' operand
+| operand EQUALS operand
 | operand NOTEQUALS operand
 | operand GREATEQ operand
 | operand LESSEQ operand
 | operand '>' operand
 | operand '<' operand
-| operand '=' operand
 
 
 

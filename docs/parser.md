@@ -193,8 +193,46 @@ int main(void)
 bison -d bison_demo.y
 ```
 
+### Generate counter examples
+
+```shell
+bison -Wcounterexamples ./parser/sql.y 
+```
+
+### Freeing Discarded Symbols
+
+As a rule of thumb, destructors are invoked only when user actions cannot manage the memory.
+
+```bison
+%destructor {
+    //
+    free( ($$) );
+}<str>
+```
+
 ## Class V.S. Struct in C++
 
 + Members of a structure are public by default, while members of a class are private by default.
 
 + A structure is mainly used for grouping data, while a class is mainly used for data abstraction and inheritance.
+
+## Construct C++ String from C string
+
++ duplicated rules could lead to conflict.
++ Token precedence and associativity should be correct.
+
+```c++
+#include <iostream>
+ 
+int main()
+{
+    // C-style string
+    const char* cstr = "Techie Delight";
+ 
+    // string constructor accepts `const char*` as a parameter
+    std::string s(cstr);
+    std::cout << s << std::endl;
+ 
+    return 0;
+}
+```
