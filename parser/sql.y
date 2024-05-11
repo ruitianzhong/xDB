@@ -25,27 +25,33 @@ using namespace xDB;
 %token UPDATE SET DROP JOIN INNER OUTER LEFT
 %token RIGHT INT INTEGER VARCHAR AS BETWEEN
 %token DELETE IS NOT NULL CHAR
-%token FLOAT INSERT
-%token IF EXISTS INTVAL EQUALS NOTEQUALS GREATEQ LESSEQ AND OR
+%token  INSERT
+%token<float_val> FLOATVAL
+%token IF EXISTS EQUALS NOTEQUALS GREATEQ LESSEQ AND OR
 %token<str> IDENTIFIER STRING
-%token EXIT
+%token EXIT DATABASES
+%token<int_val> INTVAL
 
+%type<use_stmt> use_statement
 %type select_statement
-%type insert_statement
+%type<insert_stmt> insert_statement
 %type create_statement
 %type<drop_stmt> drop_statement
 %type delete_statement
-%type show_statement
+%type<show_stmt> show_statement
 %type<stmt> statement
 %type<table_name> table_name dbname
 %type fields_definition field_type field type
-%type insert_values insert_value
-%type opt_exists opt_column_list opt_where
+%type<insert_value>  insert_value
+%type opt_exists opt_where
 %type expr operand between_expr logic_expr
 %type scalar_expr unary_expr binary_expr comp_expr
 %type literal string_literal integer_literal
 %type update_clause_comma_list update_clause
 %type select_comma_list table_list select_comma_list_with_star
+%type<column_name> column_name
+%type<column_name_list> column_list opt_column_list
+%type<insert_values_list> insert_values
 
 %left OR
 %left AND
@@ -74,6 +80,15 @@ using namespace xDB;
     std::vector<SQLStmt*> * stmt_vec;
     TableName table_name;
     xDB::SQLStmt* stmt;
+    xDB::UseStmt * use_stmt;
+    xDB::ColumnName * column_name;
+    xDB::ShowStmt * show_stmt;
+    double float_val;
+    int int_val;
+    xDB::InsertStmt * insert_stmt;
+    std::vector<ColumnName*> *column_name_list;
+    xDB::Parameter *insert_value;
+    std::vector<Parameter*>* insert_values_list;
 }
 
 
@@ -93,8 +108,8 @@ statement
 : create_statement {}
 | insert_statement {printf("insert\n");}
 | drop_statement { printf("drop stmt\n"); $$ = $1;}
-| show_statement { printf("show_statement\n");}
-| use_statement { printf("use_statement\n"); }
+| show_statement { printf("show_statement\n");$$ = $1;}
+| use_statement { printf("use_statement\n"); $$ = $1;}
 | update_statement { printf("update_statement\n"); }
 | select_statement { printf("select_statement\n"); }
 | delete_statement { printf("delete_statement\n"); }
@@ -112,16 +127,29 @@ opt_exists: IF EXISTS {}
 | /* empty */ { }
 
 opt_column_list:
-'(' comma_list ')'
-|  {}
+'(' column_list ')' { $$ = $2;}
+|  { $$ = nullptr;}
 
-comma_list:
-comma_list ',' IDENTIFIER { }
-| IDENTIFIER
+column_list:
+column_list ',' column_name {
+    $$ = $1;
+    $$->push_back($3);
+ }
+| column_name {
+    $$ = new std::vector<ColumnName*>();
+    $$->push_back($1);
+}
 
 column_name
-: IDENTIFIER
-| IDENTIFIER '.' IDENTIFIER
+: IDENTIFIER{
+    $$ = new ColumnName(nullptr,nullptr,$1);
+}
+| IDENTIFIER '.' IDENTIFIER {
+    $$ = new ColumnName(nullptr,$1,$3);
+}
+| IDENTIFIER '.' IDENTIFIER '.' IDENTIFIER{
+   $$ = new ColumnName($1,$3,$5);
+}
 
 opt_where
 : WHERE expr { }
@@ -201,16 +229,31 @@ type
  /****** INSERT statement ******/
 
 insert_statement
-: INSERT INTO table_name opt_column_list VALUES '(' insert_values ')' ';'  { }
+: INSERT INTO table_name opt_column_list VALUES '(' insert_values ')' ';'  {
+
+
+ }
 
 insert_values
-: insert_values ',' insert_value
-| insert_value
+: insert_values ',' insert_value {
+    $$ = $1;
+    $1->push_back($3);
+}
+| insert_value {
+    $$ = new std::vector<Parameter*>();
+    $$->push_back($1);
+}
 
 insert_value
-: INTVAL
-| FLOAT
-| STRING
+: INTVAL {
+    $$ = new Parameter($1);
+}
+| FLOATVAL {
+    $$ = new Parameter($1);
+}
+| STRING {
+    $$ = new Parameter($1);
+}
 
 
  /****** DROP statement (example: DROP TABLE students;) ******/
@@ -231,13 +274,19 @@ insert_value
 
  /****** SHOW (SHOW TABLES) ******/
  show_statement
- : SHOW TABLES ';' {}
- | SHOW DATABASE ';'
+ : SHOW TABLES ';' {
+    $$ = new ShowStmt(ShowTables);
+ }
+ | SHOW DATABASES ';' {
+    $$ = new ShowStmt(ShowTables);
+ }
 
  /****** USE ( USE example; ) ******/
 
  use_statement
- : USE table_name ';'
+ : USE dbname ';'{
+    $$ = new UseStmt($2);
+ }
 
 
    /****** UPDATE ******/

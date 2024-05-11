@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "sql.tab.hpp"
 
 #define TOKEN(name) { return SQL_##name; }
@@ -52,6 +53,7 @@ FROM TOKEN(FROM)
 WHERE TOKEN(WHERE)
 SELECT TOKEN(SELECT)
 DATABASE TOKEN(DATABASE)
+DATABASES TOKEN(DATABASES)
 INTO TOKEN(INTO)
 VALUES TOKEN(VALUES)
 UPDATE TOKEN(UPDATE)
@@ -98,15 +100,15 @@ EXIT TOKEN(EXIT)
  /* Float point number */
 [0-9]+"."[0-9]* |
 "."[0-9]+ {
-	printf("float point:%s\n",yytext);
-	return SQL_FLOAT;
+	yylval.float_val = atof(yytext);
+	return SQL_FLOATVAL;
 }
 
 
 
  /* Integer number */
 
-[0-9]+ { return SQL_INTVAL; }
+[0-9]+ { yylval.int_val = atoi(yytext);return SQL_INTVAL; }
 
  /* Identifier (placed after the keyword, lower priority in other words) */
 

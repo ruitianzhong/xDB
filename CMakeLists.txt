@@ -30,6 +30,11 @@ add_executable(${PROJECT_NAME} main.cpp
         sql/stmt.cpp
         include/sql/table.h
         include/sql/parser_result.h
+        sql/use_stmt.cpp
+        sql/table.cpp
+        sql/show_stmt.cpp
+        sql/insert_stmt.cpp
+        sql/create_stmt.cpp
 )
 
 add_custom_command(

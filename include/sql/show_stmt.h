@@ -7,8 +7,19 @@
 #include "stmt.h"
 
 namespace xDB {
-    class ShowStmt : SQLStmt {
+    enum ShowType {
+        ShowDatabases,
+        ShowTables,
+    };
 
+    class ShowStmt final : public SQLStmt {
+    public:
+        explicit ShowStmt(ShowType show_type_);
+
+        ~ShowStmt() override;
+
+    private:
+        ShowType show_type;
     };
 }
 #endif //SHOW_STMT_H
