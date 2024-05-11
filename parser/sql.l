@@ -1,4 +1,7 @@
 %option noyywrap
+%option reentrant
+%option nounput
+%option never-interactive
 %option case-insensitive
 %{
 #include <sstream>
@@ -10,6 +13,11 @@
 
 int chars = 0;
 int words = 0;
+const char * lexer_str = nullptr;
+unsigned long slen = 0;
+unsigned long cur = 0;
+
+
 static thread_local std::stringstream strbuf;
 
 %}
@@ -69,6 +77,7 @@ INSERT TOKEN(INSERT)
 IF TOKEN(IF)
 EXISTS TOKEN(EXISTS)
 AND TOKEN(AND)
+EXIT TOKEN(EXIT)
 
 
  /* Operator */
@@ -123,8 +132,4 @@ AND TOKEN(AND)
 . { fprintf(stderr, "[SQL-Lexer-Error] Unknown Character: %c\n", yytext[0]); return 0; }
 
 %%
-
-int yyerror(const char *msg) {
-    fprintf(stderr, "[SQL-Lexer-Error] %s\n",msg); return 0;
-}
 

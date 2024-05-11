@@ -4,7 +4,10 @@
 
 #ifndef DROP_STMT_H
 #define DROP_STMT_H
+#include <string>
+
 #include "stmt.h"
+#include "table.h"
 
 namespace xDB {
     enum DropType {
@@ -12,11 +15,11 @@ namespace xDB {
         DropDatabase,
     };
 
-    class  DropStmt : SQLStmt {
+    class DropStmt : public SQLStmt {
     public:
-        explicit DropStmt(DropType type);
+        explicit DropStmt(DropType type, TableName name_);
 
-        char *name{};
+        TableName name{};
         DropType type;
 
     private:

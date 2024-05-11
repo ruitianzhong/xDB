@@ -12,7 +12,7 @@ namespace xDB {
         TABLE
     };
 
-    class CreateStmt : SQLStmt {
+    class CreateStmt : public SQLStmt {
     };
 }
 #endif //CREATE_STMT_H

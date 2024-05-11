@@ -6,6 +6,7 @@
 #include "sql/stmt.h"
 
 namespace xDB {
-    DropStmt::DropStmt(const DropType type): SQLStmt(xSQL_DROP), type(type) {
+    DropStmt::DropStmt(const DropType type, const TableName name_): SQLStmt(xSQL_DROP), type(type) {
+        name = name_;
     }
 }

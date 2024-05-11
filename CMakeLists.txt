@@ -12,6 +12,7 @@ project(xDB
 
 add_executable(${PROJECT_NAME} main.cpp
         sql_lexer.cpp
+        sql_lexer.h
         sql.tab.cpp
         sql.tab.hpp
         include/sql/exp.h
@@ -27,12 +28,14 @@ add_executable(${PROJECT_NAME} main.cpp
         include/sql/stmts.h
         sql/drop_stmt.cpp
         sql/stmt.cpp
+        include/sql/table.h
+        include/sql/parser_result.h
 )
 
 add_custom_command(
-        OUTPUT sql_lexer.cpp
+        OUTPUT sql_lexer.cpp sql_lexer.h
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/parser/sql.l
-        COMMAND flex -o sql_lexer.cpp ${CMAKE_CURRENT_SOURCE_DIR}/parser/sql.l
+        COMMAND flex -o sql_lexer.cpp --header-file=sql_lexer.h ${CMAKE_CURRENT_SOURCE_DIR}/parser/sql.l
         COMMENT "Generating lexer"
         VERBATIM
 )

@@ -73,6 +73,32 @@ Example for detecting multiline comment in C:
          <comment>"*"+"/"        BEGIN(INITIAL);
 ```
 
+## Different input source
+
+```flex
+%{
+#undef YY_INPUT
+#define YY_INPUT(buf,result,max_size) \
+    { \
+    int c = getchar(); \
+    result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
+    }
+%}
+```
+
+## Reentrant C Scanner
+
+'flex' has the ability to generate a reentrant C scanner. This is
+accomplished by specifying '%option reentrant' ('-R') The generated
+scanner is both portable, and safe to use in one or more separate
+threads of control.(19 Reentrant C Scanners
+)
+
+We also need to configure it in bison:
+```bison
+%lex-param   { yyscan_t scanner }
+```
+
 ## Bison
 
 ### Definition
@@ -210,7 +236,9 @@ As a rule of thumb, destructors are invoked only when user actions cannot manage
 }<str>
 ```
 
-## Class V.S. Struct in C++
+## C++
+
+### Class V.S. Struct in C++
 
 + Members of a structure are public by default, while members of a class are private by default.
 
@@ -236,3 +264,11 @@ int main()
     return 0;
 }
 ```
+
+### public inheritance
+
+```shell
+‘xDB::SQLStmt’ is an inaccessible base of ‘xDB::DropStmt’
+```
+
+We should use public inheritance here.

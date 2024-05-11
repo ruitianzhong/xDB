@@ -1,9 +1,13 @@
 %{
 #include <stdio.h>
-int yylex(void);
-void yyerror(const char * s);
+#include "sql_lexer.h"
+#include "sql/parser_result.h"
+int yyerror(yyscan_t scanner,xDB::ParserResult * result,const char * s);
 %}
+%lex-param   { yyscan_t scanner }
 
+%parse-param { yyscan_t scanner }
+%parse-param { ParserResult * result }
 %code requires{
 #include "sql/stmts.h"
 using namespace xDB;
@@ -24,14 +28,16 @@ using namespace xDB;
 %token FLOAT INSERT
 %token IF EXISTS INTVAL EQUALS NOTEQUALS GREATEQ LESSEQ AND OR
 %token<str> IDENTIFIER STRING
+%token EXIT
+
 %type select_statement
 %type insert_statement
 %type create_statement
-%type  drop_statement
+%type<drop_stmt> drop_statement
 %type delete_statement
 %type show_statement
-%type statement
-%type table_name
+%type<stmt> statement
+%type<table_name> table_name dbname
 %type fields_definition field_type field type
 %type insert_values insert_value
 %type opt_exists opt_column_list opt_where
@@ -60,31 +66,47 @@ using namespace xDB;
 %left JOIN
 
 
-%start statements
+%type<stmt_vec> statements
 
 %union{
     char * str;
     xDB::DropStmt* drop_stmt;
+    std::vector<SQLStmt*> * stmt_vec;
+    TableName table_name;
+    xDB::SQLStmt* stmt;
 }
 
 
 
 %%
 statements
-: statements statement { printf("done"); YYACCEPT; }
-| statement {}
+: statements statement {
+     $$ = $1; // synthesized properties
+     $$->push_back($2);
+}
+| statement {
+    $$ = new std::vector<SQLStmt*>();
+    $$->push_back($1);
+}
 
 statement
 : create_statement {}
 | insert_statement {printf("insert\n");}
-| drop_statement { printf("drop stmt\n"); }
+| drop_statement { printf("drop stmt\n"); $$ = $1;}
 | show_statement { printf("show_statement\n");}
 | use_statement { printf("use_statement\n"); }
 | update_statement { printf("update_statement\n"); }
 | select_statement { printf("select_statement\n"); }
 | delete_statement { printf("delete_statement\n"); }
 
-table_name: IDENTIFIER { printf("table name is %s\n",$1);}
+table_name: IDENTIFIER {
+    $$.name = $1;
+    $$.schema = nullptr;
+}
+| IDENTIFIER '.' IDENTIFIER {
+    $$.name = $3;
+    $$.schema = $1;
+}
 
 opt_exists: IF EXISTS {}
 | /* empty */ { }
@@ -193,11 +215,19 @@ insert_value
 
  /****** DROP statement (example: DROP TABLE students;) ******/
  drop_statement
- : DROP TABLE opt_exists table_name ';'
- | DROP DATABASE dbname ';'
+ : DROP TABLE opt_exists table_name ';' {
+   $$ = new DropStmt(DropTable,$4);
+
+ }
+ | DROP DATABASE opt_exists dbname ';' {
+    $$ = new DropStmt(DropDatabase,$4);
+ }
 
  dbname:
- IDENTIFIER
+ IDENTIFIER {
+    $$.name = nullptr;
+    $$.schema = $1;
+ }
 
  /****** SHOW (SHOW TABLES) ******/
  show_statement
@@ -229,6 +259,7 @@ select_statement
 select_comma_list_with_star
 :'*'
 | '*' ',' select_comma_list
+| select_comma_list
 
 select_comma_list:
 select_comma_list ',' column_name
@@ -243,3 +274,24 @@ delete_statement:
 DELETE FROM table_name opt_where ';'
 
 %%
+
+int wrapped_parse(const char*text, ParserResult * result){
+    yyscan_t scanner;
+    YY_BUFFER_STATE state;
+
+    if (yylex_init(&scanner)){
+        fprintf(stderr,"SQLParser error");
+        return 0;
+    }
+    state = yy_scan_string(text,scanner);
+
+    int ret = yyparse(scanner,result);
+
+    yy_delete_buffer(state,scanner);
+    yylex_destroy(scanner);
+    return 1;
+}
+
+int yyerror(yyscan_t scanner,ParserResult * result ,const char *msg) {
+    fprintf(stderr, "[SQL-Lexer-Error] %s\n",msg);return 0;
+}
