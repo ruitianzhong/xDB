@@ -3,7 +3,8 @@ set(BUILD_SHARED_LIBS OFF)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-Wall)
-
+# testing is required
+enable_testing()
 cmake_minimum_required(VERSION 3.15)
 
 project(xDB
@@ -57,13 +58,28 @@ add_custom_command(
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 add_custom_target(check
-        pwd
+        ./test/xDB_unit_test
 )
+
+add_dependencies(check xDB_unit_test)
 
 add_custom_target(shell
         ./xDB
 )
 add_dependencies(shell xDB)
+
+
+add_library(${PROJECT_NAME}_lib STATIC
+        sql_lexer.cpp
+        sql_lexer.h
+        sql.tab.cpp
+        sql.tab.hpp
+        sql/create_stmt.cpp
+)
+target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+add_subdirectory(test)
+add_subdirectory(third_party/googletest)
 
 
 

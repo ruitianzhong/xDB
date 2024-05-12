@@ -2,6 +2,15 @@
 
 A DBMS implemented for Xidian University‘s compiler course
 
+
+## Build 
+
+To get the third party dependencies, run:
+
+```shell
+git submodule init
+```
+
 ## Supported SQL Example
 
 ```sql
