@@ -35,13 +35,14 @@ using namespace xDB;
 %type<use_stmt> use_statement
 %type select_statement
 %type<insert_stmt> insert_statement
-%type create_statement
+%type<create_stmt> create_statement
 %type<drop_stmt> drop_statement
 %type delete_statement
 %type<show_stmt> show_statement
 %type<stmt> statement
 %type<table_name> table_name dbname
-%type fields_definition field_type field type
+%type<definition_list> fields_definition
+%type<data_definition> field_type type
 %type<insert_value>  insert_value
 %type opt_exists opt_where
 %type expr operand between_expr logic_expr
@@ -89,6 +90,9 @@ using namespace xDB;
     std::vector<ColumnName*> *column_name_list;
     xDB::Parameter *insert_value;
     std::vector<Parameter*>* insert_values_list;
+    xDB::DataDefinition* data_definition;
+    std::vector<DataDefinition*>*definition_list;
+    xDB::CreateStmt * create_stmt;
 }
 
 
@@ -98,15 +102,17 @@ statements
 : statements statement {
      $$ = $1; // synthesized properties
      $$->push_back($2);
+     result->addStatement($2);
 }
 | statement {
     $$ = new std::vector<SQLStmt*>();
     $$->push_back($1);
+    result->addStatement($1);
 }
 
 statement
-: create_statement {}
-| insert_statement {printf("insert\n");}
+: create_statement { $$ = $1 ;}
+| insert_statement { $$ =$1;}
 | drop_statement { printf("drop stmt\n"); $$ = $1;}
 | show_statement { printf("show_statement\n");$$ = $1;}
 | use_statement { printf("use_statement\n"); $$ = $1;}
@@ -212,26 +218,40 @@ comp_expr: operand '=' operand
 
  /****** CREATE statement ******/
 create_statement
-: CREATE TABLE table_name '(' fields_definition ')' ';'
+: CREATE TABLE table_name '(' fields_definition ')' ';'{
+    $$ = new CreateStmt($3,$5);
+}
+| CREATE DATABASE dbname ';'{
+    $$ = new CreateStmt($3);
+}
+
 
 fields_definition
-: fields_definition ',' field_type | field_type
+: fields_definition ',' field_type {
+    $$ = $1;
+    $$->push_back($3);
+}
+| field_type {
+    $$ = new std::vector<DataDefinition*>();
+    $$->push_back($1);
+}
 
-field_type: field type
+field_type: IDENTIFIER type {
+    $$ = $2;
+    $$->setName($1);
+}
 
-field: IDENTIFIER
 
 type
-: CHAR '(' INTVAL ')' {}
-| INT {}
-| INTEGER
+: CHAR '(' INTVAL ')' { $$ = new CharDefinition(CHAR,$3); }
+| INT { $$ = new DataDefinition(INTEGER); }
+| INTEGER { $$ = new DataDefinition(INTEGER); }
 
  /****** INSERT statement ******/
 
 insert_statement
 : INSERT INTO table_name opt_column_list VALUES '(' insert_values ')' ';'  {
-
-
+    $$ = new InsertStmt($3,$4,$7);
  }
 
 insert_values

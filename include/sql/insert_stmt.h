@@ -16,6 +16,12 @@ namespace xDB {
         InsertStmt(TableName table_name, std::vector<ColumnName *> *optColumnName, std::vector<Parameter *> *para);
 
         ~InsertStmt() override;
+
+        TableName table_name;
+
+        std::vector<ColumnName *>* opt_column_names;
+
+        std::vector<Parameter *> *parameters;
     };
 
 
@@ -43,5 +49,6 @@ namespace xDB {
         double d;
         DataType type;
     };
+
 }
 #endif //INSERT_STMT_H

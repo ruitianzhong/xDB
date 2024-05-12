@@ -4,16 +4,29 @@
 
 #ifndef CREATE_STMT_H
 #define CREATE_STMT_H
+#include <vector>
+
 #include "stmt.h"
+#include "table.h"
 
 namespace xDB {
     enum CreateStmtType {
-        DATABASE,
-        TABLE
+        CreateDatabase,
+        CreateTable
     };
 
     class CreateStmt final : public SQLStmt {
+    public:
         ~CreateStmt() override;
+
+        explicit CreateStmt(TableName name_);
+
+        CreateStmt(TableName name_, std::vector<DataDefinition *> *list_);
+
+    private:
+        TableName name;
+        CreateStmtType createType;
+        std::vector<DataDefinition *> *list;
     };
 }
 #endif //CREATE_STMT_H

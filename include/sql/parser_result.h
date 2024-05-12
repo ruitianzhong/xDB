@@ -14,12 +14,10 @@ namespace xDB {
     public:
         ParserResult() = default;
 
-        void addStatement(SQLStmt *stmt) {
-            statements_.push_back(stmt);
-        }
+        void addStatement(SQLStmt *stmt);
 
     private:
-        std::vector<SQLStmt *> statements_;
+        std::vector<SQLStmt *> statements;
     };
 }
 

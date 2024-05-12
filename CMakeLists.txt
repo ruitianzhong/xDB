@@ -35,6 +35,7 @@ add_executable(${PROJECT_NAME} main.cpp
         sql/show_stmt.cpp
         sql/insert_stmt.cpp
         sql/create_stmt.cpp
+        sql/parser_result.cpp
 )
 
 add_custom_command(

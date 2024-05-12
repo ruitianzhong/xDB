@@ -29,6 +29,31 @@ namespace xDB {
         FLOAT,
         CHAR,
     };
+
+    class DataDefinition {
+    public:
+        explicit DataDefinition(DataType type_);
+
+        virtual ~DataDefinition();
+
+        void setName(char *data_name);
+
+    private:
+        DataType type;
+        char *data_name;
+    };
+
+    class CharDefinition final : public DataDefinition {
+    public:
+        explicit CharDefinition(DataType type_, int len_);
+
+        ~CharDefinition() override;
+
+        int getLen() const;
+
+    private:
+        int len;
+    };
 }
 
 #endif //TABLE_H
