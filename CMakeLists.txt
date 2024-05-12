@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options(-Wall)
 # testing is required
 enable_testing()
+
 cmake_minimum_required(VERSION 3.15)
 
 project(xDB
@@ -37,6 +38,11 @@ add_executable(${PROJECT_NAME} main.cpp
         sql/insert_stmt.cpp
         sql/create_stmt.cpp
         sql/parser_result.cpp
+        include/sql/exp.h
+        sql/exp.cpp
+        sql/select_stmt.cpp
+        sql/delete_stmt.cpp
+        sql/update_stmt.cpp
 )
 
 add_custom_command(
@@ -75,6 +81,8 @@ add_library(${PROJECT_NAME}_lib STATIC
         sql.tab.cpp
         sql.tab.hpp
         sql/create_stmt.cpp
+        include/sql/exp.h
+        sql/exp.cpp
 )
 target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
