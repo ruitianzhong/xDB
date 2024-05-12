@@ -9,6 +9,11 @@ To get the third party dependencies, run:
 
 ```shell
 git submodule init
+git submodule update
+```
+
+```shell
+sudo apt-get install libgflags-dev libzstd-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev
 ```
 
 ## Supported SQL Example

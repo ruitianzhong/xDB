@@ -62,7 +62,7 @@ add_custom_command(
         VERBATIM
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/rocksdb/include)
 add_custom_target(check
         ./test/xDB_unit_test
 )
@@ -89,6 +89,35 @@ target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR
 add_subdirectory(test)
 add_subdirectory(third_party/googletest)
 
+target_link_libraries(xDB ${CMAKE_CURRENT_SOURCE_DIR}/third_party/rocksdb/librocksdb.a)
+
+find_library(LZ4_LIB lz4)
+message(STATUS "finding ${LZ4_LIB}")
+
+find_library(ZSTD_LIB zstd)
+message(STATUS "finding ${ZSTD_LIB}")
+
+find_library(SNAPPY snappy)
+message(STATUS "finding ${SNAPPY}")
+
+find_library(BZ2 bz2)
+message(STATUS "finding ${BZ2}")
+
+find_library(gFLAGS gflags)
+message(STATUS "finding ${gFLAGS}")
+
+find_library(ZLIB z)
+message(STATUS "finding ${ZLIB}")
+
+target_link_libraries(xDB ${gFLAGS} ${BZ2} ${SNAPPY} ${ZSTD_LIB} ${LZ4_LIB} ${ZLIB})
+
+
+add_custom_target(rocksdb
+        COMMAND cd
+        COMMAND make -j4 --file ${CMAKE_CURRENT_SOURCE_DIR}/third_party/rocksdb/Makefile --directory ${CMAKE_CURRENT_SOURCE_DIR}/third_party/rocksdb static_lib
+)
+
+add_dependencies(xDB rocksdb)
 
 
 
