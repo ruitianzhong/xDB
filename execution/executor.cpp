@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+
 #include "sql/parser_result.h"
 
 namespace xDB {
@@ -30,10 +31,12 @@ namespace xDB {
             case xSQL_DROP:
                 break;
             case xSQL_SHOW:
+                executeShowStmt(dynamic_cast<ShowStmt *>(stmt));
                 break;
             case xSQL_DELETE:
                 break;
             case xSQL_INSERT:
+                executeInsertStmt(dynamic_cast<InsertStmt *>(stmt));
                 break;
             case xSQL_CREATE:
                 executeCreateStmt(dynamic_cast<CreateStmt *>(stmt));
@@ -43,6 +46,7 @@ namespace xDB {
             case xSQL_SELECT:
                 break;
             default:
+                std::cout << "Unknown SQL statement type" << std::endl;
                 break;
         }
         return true;

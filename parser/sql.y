@@ -364,7 +364,7 @@ insert_value
     $$ = new ShowStmt(ShowTables);
  }
  | SHOW DATABASES ';' {
-    $$ = new ShowStmt(ShowTables);
+    $$ = new ShowStmt(ShowDatabases);
  }
 
  /****** USE ( USE example; ) ******/

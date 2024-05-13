@@ -14,7 +14,7 @@ namespace xDB {
     void static createDatabase(CreateStmt *stmt, rocksdb::DB *db) {
         std::string v;
         rocksdb::ReadOptions options;
-        auto s = db->Get(rocksdb::ReadOptions(), DB_META_PREFIX + stmt->name.schema, &v);
+        auto s = db->Get(rocksdb::ReadOptions(), Executor::MakeDBMetadataPrefix(stmt->name.schema), &v);
         if (s.IsNotFound()) {
             const DBMetadata db_metadata;
             std::string str;
@@ -26,11 +26,11 @@ namespace xDB {
         std::cout << stmt->name.schema << " has already existed" << std::endl;
     }
 
-    bool setUpMetaData(TableMetadata *metadata, CreateStmt *stmt) {
+    bool setUpMetaData(TableMetadata *metadata, const CreateStmt *stmt) {
         assert(stmt->list!=nullptr);
         std::unordered_set<std::string> s;
 
-        for (auto &def: *stmt->list) {
+        for (const auto &def: *stmt->list) {
             assert(def->data_name!=nullptr);
             const auto ret = s.find(def->data_name);
             if (ret != s.end()) {
@@ -56,7 +56,7 @@ namespace xDB {
     }
 
 
-    void Executor::createTable(CreateStmt *stmt) {
+    void Executor::createTable(CreateStmt *stmt) const {
         assert(stmt->name.name!=nullptr);
         std::string cur = currentDB;
         if (stmt->name.schema != nullptr) {
@@ -66,7 +66,8 @@ namespace xDB {
             std::cout << "No database selected" << std::endl;
             return;
         }
-        std::string key = TABLE_META_PREFIX + cur + stmt->name.name, value;
+        const std::string key = MakeTableMetadataPrefix(cur, stmt->name.name);
+        std::string value;
 
         auto s = db->Get(rocksdb::ReadOptions(), key, &value);
         if (s.ok()) {
@@ -83,12 +84,12 @@ namespace xDB {
             std::cout << "`" << cur << "." << stmt->name.name << "` created" << std::endl;
         }
         if (!s.IsNotFound()) {
-            std::cout << "Unexpected error" << std::endl;
+            std::cout << "Unexpected error: " << s.ToString() << std::endl;
         }
     }
 
 
-    void Executor::executeCreateStmt(CreateStmt *create_stmt) {
+    void Executor::executeCreateStmt(CreateStmt *create_stmt) const {
         assert(create_stmt!=nullptr);
         switch (create_stmt->createType) {
             case CreateDatabase:

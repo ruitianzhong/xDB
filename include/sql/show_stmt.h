@@ -18,6 +18,8 @@ namespace xDB {
 
         ~ShowStmt() override;
 
+        ShowType getShowType() const;
+
     private:
         ShowType show_type;
     };

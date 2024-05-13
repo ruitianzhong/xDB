@@ -9,7 +9,7 @@
 #include "constant.h"
 
 namespace xDB {
-    void Executor::executeUseStmt(UseStmt *use_stmt) {
+    void Executor::executeUseStmt(const UseStmt *use_stmt) {
         assert(use_stmt!=nullptr);
         assert(use_stmt->name.schema!=nullptr);
         std::string value;
@@ -20,7 +20,7 @@ namespace xDB {
         } else if (s.IsNotFound()) {
             std::cout << "Database `" << use_stmt->name.schema << "` does not exist." << std::endl;
         } else {
-            std::cout << "Unexpected error" << std::endl;
+            std::cout << "Unexpected error " << s.ToString() << std::endl;
         }
     }
 }

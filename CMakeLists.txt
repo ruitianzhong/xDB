@@ -50,6 +50,8 @@ add_executable(${PROJECT_NAME} main.cpp
         execution/create_executor.cpp
         include/constant.h
         execution/use_executor.cpp
+        execution/show_executor.cpp
+        execution/insert_executor.cpp
 )
 
 add_custom_command(
