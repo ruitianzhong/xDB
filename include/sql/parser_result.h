@@ -16,6 +16,8 @@ namespace xDB {
 
         void addStatement(SQLStmt *stmt);
 
+        std::vector<SQLStmt *> *getStatements();
+
     private:
         std::vector<SQLStmt *> statements;
     };

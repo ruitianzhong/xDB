@@ -7,6 +7,8 @@
 #include "rocksdb/db.h"
 #include <cassert>
 #include "fort.hpp"
+#include "common/codec/db.pb.h"
+#include "execution/executor.h"
 
 int wrapped_parse(const char *text, xDB::ParserResult *result);
 
@@ -16,34 +18,21 @@ void read_loop();
 
 
 void read_loop() {
+    xDB::Executor executor;
+    executor.init();
     while (true) {
         std::getline(std::cin, s);
         auto result = new xDB::ParserResult();
         wrapped_parse(s.c_str(), result);
+        if (!executor.execute(result)) {
+            break;
+        }
     }
+    executor.shutdown();
 }
 
 
 void tryRocksDB() {
-    rocksdb::DB *db;
-    rocksdb::Options options;
-    options.create_if_missing = true;
-    rocksdb::Status status = rocksdb::DB::Open(options, "/tmp/testdb", &db);
-    assert(status.ok());
-    if (status.ok()) status = db->Put(rocksdb::WriteOptions(), "1", "1");
-    std::string value;
-    if (status.ok()) status = db->Get(rocksdb::ReadOptions(), "2", &value);
-    std::cout << status.ok();
-    // assert(status.ok());
-
-    status = db->Delete(rocksdb::WriteOptions(), "1");
-    assert(status.ok());
-
-    rocksdb::WaitForCompactOptions opt = rocksdb::WaitForCompactOptions();
-    opt.close_db = true;
-    status = db->WaitForCompact(opt);
-    std::cout << status.ok();
-    delete db;
 }
 
 void fort_test() {
@@ -57,9 +46,26 @@ void fort_test() {
     std::cout << table.to_string() << std::endl;
 }
 
+void protobuf_test() {
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
+    auto person = xDB::Person();
+
+    person.set_id(42);
+    person.set_name("hello");
+    std::string output;
+    bool ok = person.SerializeToString(&output);
+    assert(ok);
+    auto decode = xDB::Person();
+    ok = decode.ParseFromString(output);
+    assert(ok);
+    std::cout << "protobuf test ended";
+    std::cout << decode.name() << std::endl;
+}
+
 int main(int argc, char **argv) {
     fort_test();
     tryRocksDB();
+    protobuf_test();
     read_loop();
     return 0;
 }

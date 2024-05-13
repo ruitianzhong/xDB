@@ -13,5 +13,12 @@ namespace xDB {
         return type_;
     }
 
+    std::string SQLStmt::toString() {
+        return "Default string";
+    }
+
     SQLStmt::~SQLStmt() = default;
+
+    ExitStmt::ExitStmt(): SQLStmt(xSQL_EXIT) {
+    }
 }

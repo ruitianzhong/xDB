@@ -43,6 +43,12 @@ add_executable(${PROJECT_NAME} main.cpp
         sql/select_stmt.cpp
         sql/delete_stmt.cpp
         sql/update_stmt.cpp
+        common/codec/db.pb.cc
+        include/execution/executor.h
+        execution/executor.cpp
+        execution/execution_result.cpp
+        execution/create_executor.cpp
+        include/constant.h
 )
 
 add_custom_command(
@@ -83,6 +89,7 @@ add_library(${PROJECT_NAME}_lib STATIC
         sql/create_stmt.cpp
         include/sql/exp.h
         sql/exp.cpp
+        common/codec/db.pb.cc
 )
 target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -113,7 +120,7 @@ message(STATUS "finding ${ZLIB}")
 
 #target_link_libraries(xDB PUBLIC ${gFLAGS} ${BZ2} ${SNAPPY} ${ZSTD_LIB} ${LZ4_LIB} ${ZLIB})
 
-target_link_libraries(xDB PUBLIC lz4 zstd snappy bz2 gflags z)
+target_link_libraries(xDB PUBLIC lz4 zstd snappy bz2 gflags z protobuf)
 
 add_custom_target(rocksdb
         COMMAND cd
@@ -130,6 +137,12 @@ set(FORT_ENABLE_TESTING OFF CACHE INTERNAL "")
 add_subdirectory(third_party/libfort)
 target_link_libraries(xDB PRIVATE fort)
 
+
+find_program(MAKE make)
+message(STATUS "finding program make")
+
+find_library(PROTOBUF protobuf REQUIRED)
+message(STATUS "finding ${PROTOBUF}")
 
 
 

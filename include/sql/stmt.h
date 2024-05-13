@@ -4,6 +4,7 @@
 
 #ifndef STMT_H
 #define STMT_H
+#include <string>
 
 namespace xDB {
     enum SQLStmtType {
@@ -15,6 +16,7 @@ namespace xDB {
         xSQL_DROP,
         xSQL_USE,
         xSQL_SHOW,
+        xSQL_EXIT,
     };
 
     class SQLStmt {
@@ -23,10 +25,17 @@ namespace xDB {
 
         SQLStmtType type() const;
 
+        virtual std::string toString();
+
         virtual ~SQLStmt();
 
     private:
         SQLStmtType type_;
+    };
+
+    class ExitStmt : public SQLStmt {
+    public:
+        ExitStmt();
     };
 }
 

@@ -127,6 +127,7 @@ statement
 | update_statement { printf("update_statement\n"); $$ = $1;}
 | select_statement {  $$ = $1;}
 | delete_statement { $$ = $1; }
+| EXIT ';' { $$ = new ExitStmt(); }
 
 table_name: IDENTIFIER {
     $$.name = $1;

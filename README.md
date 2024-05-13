@@ -13,7 +13,10 @@ git submodule update
 ```
 
 ```shell
+# required by rocksdb
 sudo apt-get install libgflags-dev libzstd-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev
+# required by protobuf
+sudo apt-get install libprotobuf-dev protobuf-compiler
 ```
 
 ## Supported SQL Example
