@@ -38,7 +38,7 @@ namespace xDB {
 
         void setName(char *data_name);
 
-    private:
+
         DataType type;
         char *data_name;
     };

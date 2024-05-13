@@ -48,7 +48,7 @@ struct TableStruct_db_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[1]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[6]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -56,12 +56,32 @@ struct TableStruct_db_2eproto {
 };
 extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_db_2eproto;
 namespace xDB {
+class Column;
+class ColumnDefaultTypeInternal;
+extern ColumnDefaultTypeInternal _Column_default_instance_;
+class DBDefinition;
+class DBDefinitionDefaultTypeInternal;
+extern DBDefinitionDefaultTypeInternal _DBDefinition_default_instance_;
+class DBMetadata;
+class DBMetadataDefaultTypeInternal;
+extern DBMetadataDefaultTypeInternal _DBMetadata_default_instance_;
 class Person;
 class PersonDefaultTypeInternal;
 extern PersonDefaultTypeInternal _Person_default_instance_;
+class Row;
+class RowDefaultTypeInternal;
+extern RowDefaultTypeInternal _Row_default_instance_;
+class TableMetadata;
+class TableMetadataDefaultTypeInternal;
+extern TableMetadataDefaultTypeInternal _TableMetadata_default_instance_;
 }  // namespace xDB
 PROTOBUF_NAMESPACE_OPEN
+template<> ::xDB::Column* Arena::CreateMaybeMessage<::xDB::Column>(Arena*);
+template<> ::xDB::DBDefinition* Arena::CreateMaybeMessage<::xDB::DBDefinition>(Arena*);
+template<> ::xDB::DBMetadata* Arena::CreateMaybeMessage<::xDB::DBMetadata>(Arena*);
 template<> ::xDB::Person* Arena::CreateMaybeMessage<::xDB::Person>(Arena*);
+template<> ::xDB::Row* Arena::CreateMaybeMessage<::xDB::Row>(Arena*);
+template<> ::xDB::TableMetadata* Arena::CreateMaybeMessage<::xDB::TableMetadata>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace xDB {
 
@@ -86,6 +106,55 @@ inline bool Person_PersonType_Parse(
     const std::string& name, Person_PersonType* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Person_PersonType>(
     Person_PersonType_descriptor(), name, value);
+}
+enum Column_ColumnType : int {
+  Column_ColumnType_COLUMN_INT = 0,
+  Column_ColumnType_COLUMN_CHAR = 1,
+  Column_ColumnType_COLUMN_NULL = 3,
+  Column_ColumnType_COLUMN_FLOAT = 4
+};
+bool Column_ColumnType_IsValid(int value);
+constexpr Column_ColumnType Column_ColumnType_ColumnType_MIN = Column_ColumnType_COLUMN_INT;
+constexpr Column_ColumnType Column_ColumnType_ColumnType_MAX = Column_ColumnType_COLUMN_FLOAT;
+constexpr int Column_ColumnType_ColumnType_ARRAYSIZE = Column_ColumnType_ColumnType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* Column_ColumnType_descriptor();
+template<typename T>
+inline const std::string& Column_ColumnType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, Column_ColumnType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function Column_ColumnType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    Column_ColumnType_descriptor(), enum_t_value);
+}
+inline bool Column_ColumnType_Parse(
+    const std::string& name, Column_ColumnType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<Column_ColumnType>(
+    Column_ColumnType_descriptor(), name, value);
+}
+enum DBDefinition_DefinitionType : int {
+  DBDefinition_DefinitionType_INTEGER = 1,
+  DBDefinition_DefinitionType_CHAR = 2,
+  DBDefinition_DefinitionType_FLOAT = 3
+};
+bool DBDefinition_DefinitionType_IsValid(int value);
+constexpr DBDefinition_DefinitionType DBDefinition_DefinitionType_DefinitionType_MIN = DBDefinition_DefinitionType_INTEGER;
+constexpr DBDefinition_DefinitionType DBDefinition_DefinitionType_DefinitionType_MAX = DBDefinition_DefinitionType_FLOAT;
+constexpr int DBDefinition_DefinitionType_DefinitionType_ARRAYSIZE = DBDefinition_DefinitionType_DefinitionType_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* DBDefinition_DefinitionType_descriptor();
+template<typename T>
+inline const std::string& DBDefinition_DefinitionType_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, DBDefinition_DefinitionType>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function DBDefinition_DefinitionType_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    DBDefinition_DefinitionType_descriptor(), enum_t_value);
+}
+inline bool DBDefinition_DefinitionType_Parse(
+    const std::string& name, DBDefinition_DefinitionType* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<DBDefinition_DefinitionType>(
+    DBDefinition_DefinitionType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -295,6 +364,927 @@ class Person PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::int32 id_;
   friend struct ::TableStruct_db_2eproto;
 };
+// -------------------------------------------------------------------
+
+class Column PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:xDB.Column) */ {
+ public:
+  inline Column() : Column(nullptr) {};
+  virtual ~Column();
+
+  Column(const Column& from);
+  Column(Column&& from) noexcept
+    : Column() {
+    *this = ::std::move(from);
+  }
+
+  inline Column& operator=(const Column& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Column& operator=(Column&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Column& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Column* internal_default_instance() {
+    return reinterpret_cast<const Column*>(
+               &_Column_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(Column& a, Column& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Column* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Column* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Column* New() const final {
+    return CreateMaybeMessage<Column>(nullptr);
+  }
+
+  Column* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Column>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Column& from);
+  void MergeFrom(const Column& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Column* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "xDB.Column";
+  }
+  protected:
+  explicit Column(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_db_2eproto);
+    return ::descriptor_table_db_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  typedef Column_ColumnType ColumnType;
+  static constexpr ColumnType COLUMN_INT =
+    Column_ColumnType_COLUMN_INT;
+  static constexpr ColumnType COLUMN_CHAR =
+    Column_ColumnType_COLUMN_CHAR;
+  static constexpr ColumnType COLUMN_NULL =
+    Column_ColumnType_COLUMN_NULL;
+  static constexpr ColumnType COLUMN_FLOAT =
+    Column_ColumnType_COLUMN_FLOAT;
+  static inline bool ColumnType_IsValid(int value) {
+    return Column_ColumnType_IsValid(value);
+  }
+  static constexpr ColumnType ColumnType_MIN =
+    Column_ColumnType_ColumnType_MIN;
+  static constexpr ColumnType ColumnType_MAX =
+    Column_ColumnType_ColumnType_MAX;
+  static constexpr int ColumnType_ARRAYSIZE =
+    Column_ColumnType_ColumnType_ARRAYSIZE;
+  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+  ColumnType_descriptor() {
+    return Column_ColumnType_descriptor();
+  }
+  template<typename T>
+  static inline const std::string& ColumnType_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, ColumnType>::value ||
+      ::std::is_integral<T>::value,
+      "Incorrect type passed to function ColumnType_Name.");
+    return Column_ColumnType_Name(enum_t_value);
+  }
+  static inline bool ColumnType_Parse(const std::string& name,
+      ColumnType* value) {
+    return Column_ColumnType_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kStrFieldNumber = 3,
+    kTypeFieldNumber = 1,
+    kIntegerNumFieldNumber = 2,
+    kFloatNumFieldNumber = 4,
+  };
+  // optional string str = 3;
+  bool has_str() const;
+  private:
+  bool _internal_has_str() const;
+  public:
+  void clear_str();
+  const std::string& str() const;
+  void set_str(const std::string& value);
+  void set_str(std::string&& value);
+  void set_str(const char* value);
+  void set_str(const char* value, size_t size);
+  std::string* mutable_str();
+  std::string* release_str();
+  void set_allocated_str(std::string* str);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_str();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_str(
+      std::string* str);
+  private:
+  const std::string& _internal_str() const;
+  void _internal_set_str(const std::string& value);
+  std::string* _internal_mutable_str();
+  public:
+
+  // optional .xDB.Column.ColumnType type = 1;
+  bool has_type() const;
+  private:
+  bool _internal_has_type() const;
+  public:
+  void clear_type();
+  ::xDB::Column_ColumnType type() const;
+  void set_type(::xDB::Column_ColumnType value);
+  private:
+  ::xDB::Column_ColumnType _internal_type() const;
+  void _internal_set_type(::xDB::Column_ColumnType value);
+  public:
+
+  // optional int32 integer_num = 2;
+  bool has_integer_num() const;
+  private:
+  bool _internal_has_integer_num() const;
+  public:
+  void clear_integer_num();
+  ::PROTOBUF_NAMESPACE_ID::int32 integer_num() const;
+  void set_integer_num(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_integer_num() const;
+  void _internal_set_integer_num(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional double float_num = 4;
+  bool has_float_num() const;
+  private:
+  bool _internal_has_float_num() const;
+  public:
+  void clear_float_num();
+  double float_num() const;
+  void set_float_num(double value);
+  private:
+  double _internal_float_num() const;
+  void _internal_set_float_num(double value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:xDB.Column)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr str_;
+  int type_;
+  ::PROTOBUF_NAMESPACE_ID::int32 integer_num_;
+  double float_num_;
+  friend struct ::TableStruct_db_2eproto;
+};
+// -------------------------------------------------------------------
+
+class Row PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:xDB.Row) */ {
+ public:
+  inline Row() : Row(nullptr) {};
+  virtual ~Row();
+
+  Row(const Row& from);
+  Row(Row&& from) noexcept
+    : Row() {
+    *this = ::std::move(from);
+  }
+
+  inline Row& operator=(const Row& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Row& operator=(Row&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Row& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Row* internal_default_instance() {
+    return reinterpret_cast<const Row*>(
+               &_Row_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(Row& a, Row& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Row* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Row* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Row* New() const final {
+    return CreateMaybeMessage<Row>(nullptr);
+  }
+
+  Row* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Row>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Row& from);
+  void MergeFrom(const Row& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Row* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "xDB.Row";
+  }
+  protected:
+  explicit Row(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_db_2eproto);
+    return ::descriptor_table_db_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kColumnsFieldNumber = 1,
+  };
+  // repeated .xDB.Column columns = 1;
+  int columns_size() const;
+  private:
+  int _internal_columns_size() const;
+  public:
+  void clear_columns();
+  ::xDB::Column* mutable_columns(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::Column >*
+      mutable_columns();
+  private:
+  const ::xDB::Column& _internal_columns(int index) const;
+  ::xDB::Column* _internal_add_columns();
+  public:
+  const ::xDB::Column& columns(int index) const;
+  ::xDB::Column* add_columns();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::Column >&
+      columns() const;
+
+  // @@protoc_insertion_point(class_scope:xDB.Row)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::Column > columns_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_db_2eproto;
+};
+// -------------------------------------------------------------------
+
+class TableMetadata PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:xDB.TableMetadata) */ {
+ public:
+  inline TableMetadata() : TableMetadata(nullptr) {};
+  virtual ~TableMetadata();
+
+  TableMetadata(const TableMetadata& from);
+  TableMetadata(TableMetadata&& from) noexcept
+    : TableMetadata() {
+    *this = ::std::move(from);
+  }
+
+  inline TableMetadata& operator=(const TableMetadata& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TableMetadata& operator=(TableMetadata&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const TableMetadata& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const TableMetadata* internal_default_instance() {
+    return reinterpret_cast<const TableMetadata*>(
+               &_TableMetadata_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    3;
+
+  friend void swap(TableMetadata& a, TableMetadata& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TableMetadata* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TableMetadata* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline TableMetadata* New() const final {
+    return CreateMaybeMessage<TableMetadata>(nullptr);
+  }
+
+  TableMetadata* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<TableMetadata>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const TableMetadata& from);
+  void MergeFrom(const TableMetadata& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TableMetadata* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "xDB.TableMetadata";
+  }
+  protected:
+  explicit TableMetadata(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_db_2eproto);
+    return ::descriptor_table_db_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kDefinitionsFieldNumber = 1,
+  };
+  // repeated .xDB.DBDefinition definitions = 1;
+  int definitions_size() const;
+  private:
+  int _internal_definitions_size() const;
+  public:
+  void clear_definitions();
+  ::xDB::DBDefinition* mutable_definitions(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::DBDefinition >*
+      mutable_definitions();
+  private:
+  const ::xDB::DBDefinition& _internal_definitions(int index) const;
+  ::xDB::DBDefinition* _internal_add_definitions();
+  public:
+  const ::xDB::DBDefinition& definitions(int index) const;
+  ::xDB::DBDefinition* add_definitions();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::DBDefinition >&
+      definitions() const;
+
+  // @@protoc_insertion_point(class_scope:xDB.TableMetadata)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::DBDefinition > definitions_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_db_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DBDefinition PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:xDB.DBDefinition) */ {
+ public:
+  inline DBDefinition() : DBDefinition(nullptr) {};
+  virtual ~DBDefinition();
+
+  DBDefinition(const DBDefinition& from);
+  DBDefinition(DBDefinition&& from) noexcept
+    : DBDefinition() {
+    *this = ::std::move(from);
+  }
+
+  inline DBDefinition& operator=(const DBDefinition& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DBDefinition& operator=(DBDefinition&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const DBDefinition& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const DBDefinition* internal_default_instance() {
+    return reinterpret_cast<const DBDefinition*>(
+               &_DBDefinition_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(DBDefinition& a, DBDefinition& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DBDefinition* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DBDefinition* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DBDefinition* New() const final {
+    return CreateMaybeMessage<DBDefinition>(nullptr);
+  }
+
+  DBDefinition* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DBDefinition>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const DBDefinition& from);
+  void MergeFrom(const DBDefinition& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DBDefinition* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "xDB.DBDefinition";
+  }
+  protected:
+  explicit DBDefinition(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_db_2eproto);
+    return ::descriptor_table_db_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  typedef DBDefinition_DefinitionType DefinitionType;
+  static constexpr DefinitionType INTEGER =
+    DBDefinition_DefinitionType_INTEGER;
+  static constexpr DefinitionType CHAR =
+    DBDefinition_DefinitionType_CHAR;
+  static constexpr DefinitionType FLOAT =
+    DBDefinition_DefinitionType_FLOAT;
+  static inline bool DefinitionType_IsValid(int value) {
+    return DBDefinition_DefinitionType_IsValid(value);
+  }
+  static constexpr DefinitionType DefinitionType_MIN =
+    DBDefinition_DefinitionType_DefinitionType_MIN;
+  static constexpr DefinitionType DefinitionType_MAX =
+    DBDefinition_DefinitionType_DefinitionType_MAX;
+  static constexpr int DefinitionType_ARRAYSIZE =
+    DBDefinition_DefinitionType_DefinitionType_ARRAYSIZE;
+  static inline const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor*
+  DefinitionType_descriptor() {
+    return DBDefinition_DefinitionType_descriptor();
+  }
+  template<typename T>
+  static inline const std::string& DefinitionType_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, DefinitionType>::value ||
+      ::std::is_integral<T>::value,
+      "Incorrect type passed to function DefinitionType_Name.");
+    return DBDefinition_DefinitionType_Name(enum_t_value);
+  }
+  static inline bool DefinitionType_Parse(const std::string& name,
+      DefinitionType* value) {
+    return DBDefinition_DefinitionType_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNameFieldNumber = 2,
+    kTypeFieldNumber = 1,
+  };
+  // optional string name = 2;
+  bool has_name() const;
+  private:
+  bool _internal_has_name() const;
+  public:
+  void clear_name();
+  const std::string& name() const;
+  void set_name(const std::string& value);
+  void set_name(std::string&& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  std::string* mutable_name();
+  std::string* release_name();
+  void set_allocated_name(std::string* name);
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  std::string* unsafe_arena_release_name();
+  GOOGLE_PROTOBUF_RUNTIME_DEPRECATED("The unsafe_arena_ accessors for"
+  "    string fields are deprecated and will be removed in a"
+  "    future release.")
+  void unsafe_arena_set_allocated_name(
+      std::string* name);
+  private:
+  const std::string& _internal_name() const;
+  void _internal_set_name(const std::string& value);
+  std::string* _internal_mutable_name();
+  public:
+
+  // optional .xDB.DBDefinition.DefinitionType type = 1;
+  bool has_type() const;
+  private:
+  bool _internal_has_type() const;
+  public:
+  void clear_type();
+  ::xDB::DBDefinition_DefinitionType type() const;
+  void set_type(::xDB::DBDefinition_DefinitionType value);
+  private:
+  ::xDB::DBDefinition_DefinitionType _internal_type() const;
+  void _internal_set_type(::xDB::DBDefinition_DefinitionType value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:xDB.DBDefinition)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
+  int type_;
+  friend struct ::TableStruct_db_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DBMetadata PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:xDB.DBMetadata) */ {
+ public:
+  inline DBMetadata() : DBMetadata(nullptr) {};
+  virtual ~DBMetadata();
+
+  DBMetadata(const DBMetadata& from);
+  DBMetadata(DBMetadata&& from) noexcept
+    : DBMetadata() {
+    *this = ::std::move(from);
+  }
+
+  inline DBMetadata& operator=(const DBMetadata& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DBMetadata& operator=(DBMetadata&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet& unknown_fields() const {
+    return _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance);
+  }
+  inline ::PROTOBUF_NAMESPACE_ID::UnknownFieldSet* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const DBMetadata& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const DBMetadata* internal_default_instance() {
+    return reinterpret_cast<const DBMetadata*>(
+               &_DBMetadata_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(DBMetadata& a, DBMetadata& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DBMetadata* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DBMetadata* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline DBMetadata* New() const final {
+    return CreateMaybeMessage<DBMetadata>(nullptr);
+  }
+
+  DBMetadata* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<DBMetadata>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const DBMetadata& from);
+  void MergeFrom(const DBMetadata& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DBMetadata* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "xDB.DBMetadata";
+  }
+  protected:
+  explicit DBMetadata(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_db_2eproto);
+    return ::descriptor_table_db_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTablesFieldNumber = 1,
+  };
+  // repeated string tables = 1;
+  int tables_size() const;
+  private:
+  int _internal_tables_size() const;
+  public:
+  void clear_tables();
+  const std::string& tables(int index) const;
+  std::string* mutable_tables(int index);
+  void set_tables(int index, const std::string& value);
+  void set_tables(int index, std::string&& value);
+  void set_tables(int index, const char* value);
+  void set_tables(int index, const char* value, size_t size);
+  std::string* add_tables();
+  void add_tables(const std::string& value);
+  void add_tables(std::string&& value);
+  void add_tables(const char* value);
+  void add_tables(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& tables() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_tables();
+  private:
+  const std::string& _internal_tables(int index) const;
+  std::string* _internal_add_tables();
+  public:
+
+  // @@protoc_insertion_point(class_scope:xDB.DBMetadata)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> tables_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_db_2eproto;
+};
 // ===================================================================
 
 
@@ -427,9 +1417,491 @@ inline void Person::set_id(::PROTOBUF_NAMESPACE_ID::int32 value) {
   // @@protoc_insertion_point(field_set:xDB.Person.id)
 }
 
+// -------------------------------------------------------------------
+
+// Column
+
+// optional .xDB.Column.ColumnType type = 1;
+inline bool Column::_internal_has_type() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool Column::has_type() const {
+  return _internal_has_type();
+}
+inline void Column::clear_type() {
+  type_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::xDB::Column_ColumnType Column::_internal_type() const {
+  return static_cast< ::xDB::Column_ColumnType >(type_);
+}
+inline ::xDB::Column_ColumnType Column::type() const {
+  // @@protoc_insertion_point(field_get:xDB.Column.type)
+  return _internal_type();
+}
+inline void Column::_internal_set_type(::xDB::Column_ColumnType value) {
+  assert(::xDB::Column_ColumnType_IsValid(value));
+  _has_bits_[0] |= 0x00000002u;
+  type_ = value;
+}
+inline void Column::set_type(::xDB::Column_ColumnType value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:xDB.Column.type)
+}
+
+// optional int32 integer_num = 2;
+inline bool Column::_internal_has_integer_num() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool Column::has_integer_num() const {
+  return _internal_has_integer_num();
+}
+inline void Column::clear_integer_num() {
+  integer_num_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Column::_internal_integer_num() const {
+  return integer_num_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Column::integer_num() const {
+  // @@protoc_insertion_point(field_get:xDB.Column.integer_num)
+  return _internal_integer_num();
+}
+inline void Column::_internal_set_integer_num(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000004u;
+  integer_num_ = value;
+}
+inline void Column::set_integer_num(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_integer_num(value);
+  // @@protoc_insertion_point(field_set:xDB.Column.integer_num)
+}
+
+// optional string str = 3;
+inline bool Column::_internal_has_str() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool Column::has_str() const {
+  return _internal_has_str();
+}
+inline void Column::clear_str() {
+  str_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& Column::str() const {
+  // @@protoc_insertion_point(field_get:xDB.Column.str)
+  return _internal_str();
+}
+inline void Column::set_str(const std::string& value) {
+  _internal_set_str(value);
+  // @@protoc_insertion_point(field_set:xDB.Column.str)
+}
+inline std::string* Column::mutable_str() {
+  // @@protoc_insertion_point(field_mutable:xDB.Column.str)
+  return _internal_mutable_str();
+}
+inline const std::string& Column::_internal_str() const {
+  return str_.Get();
+}
+inline void Column::_internal_set_str(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  str_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void Column::set_str(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  str_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:xDB.Column.str)
+}
+inline void Column::set_str(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  str_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:xDB.Column.str)
+}
+inline void Column::set_str(const char* value,
+    size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  str_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:xDB.Column.str)
+}
+inline std::string* Column::_internal_mutable_str() {
+  _has_bits_[0] |= 0x00000001u;
+  return str_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* Column::release_str() {
+  // @@protoc_insertion_point(field_release:xDB.Column.str)
+  if (!_internal_has_str()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return str_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void Column::set_allocated_str(std::string* str) {
+  if (str != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  str_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), str,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:xDB.Column.str)
+}
+inline std::string* Column::unsafe_arena_release_str() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xDB.Column.str)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  _has_bits_[0] &= ~0x00000001u;
+  return str_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void Column::unsafe_arena_set_allocated_str(
+    std::string* str) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (str != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  str_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      str, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xDB.Column.str)
+}
+
+// optional double float_num = 4;
+inline bool Column::_internal_has_float_num() const {
+  bool value = (_has_bits_[0] & 0x00000008u) != 0;
+  return value;
+}
+inline bool Column::has_float_num() const {
+  return _internal_has_float_num();
+}
+inline void Column::clear_float_num() {
+  float_num_ = 0;
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline double Column::_internal_float_num() const {
+  return float_num_;
+}
+inline double Column::float_num() const {
+  // @@protoc_insertion_point(field_get:xDB.Column.float_num)
+  return _internal_float_num();
+}
+inline void Column::_internal_set_float_num(double value) {
+  _has_bits_[0] |= 0x00000008u;
+  float_num_ = value;
+}
+inline void Column::set_float_num(double value) {
+  _internal_set_float_num(value);
+  // @@protoc_insertion_point(field_set:xDB.Column.float_num)
+}
+
+// -------------------------------------------------------------------
+
+// Row
+
+// repeated .xDB.Column columns = 1;
+inline int Row::_internal_columns_size() const {
+  return columns_.size();
+}
+inline int Row::columns_size() const {
+  return _internal_columns_size();
+}
+inline void Row::clear_columns() {
+  columns_.Clear();
+}
+inline ::xDB::Column* Row::mutable_columns(int index) {
+  // @@protoc_insertion_point(field_mutable:xDB.Row.columns)
+  return columns_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::Column >*
+Row::mutable_columns() {
+  // @@protoc_insertion_point(field_mutable_list:xDB.Row.columns)
+  return &columns_;
+}
+inline const ::xDB::Column& Row::_internal_columns(int index) const {
+  return columns_.Get(index);
+}
+inline const ::xDB::Column& Row::columns(int index) const {
+  // @@protoc_insertion_point(field_get:xDB.Row.columns)
+  return _internal_columns(index);
+}
+inline ::xDB::Column* Row::_internal_add_columns() {
+  return columns_.Add();
+}
+inline ::xDB::Column* Row::add_columns() {
+  // @@protoc_insertion_point(field_add:xDB.Row.columns)
+  return _internal_add_columns();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::Column >&
+Row::columns() const {
+  // @@protoc_insertion_point(field_list:xDB.Row.columns)
+  return columns_;
+}
+
+// -------------------------------------------------------------------
+
+// TableMetadata
+
+// repeated .xDB.DBDefinition definitions = 1;
+inline int TableMetadata::_internal_definitions_size() const {
+  return definitions_.size();
+}
+inline int TableMetadata::definitions_size() const {
+  return _internal_definitions_size();
+}
+inline void TableMetadata::clear_definitions() {
+  definitions_.Clear();
+}
+inline ::xDB::DBDefinition* TableMetadata::mutable_definitions(int index) {
+  // @@protoc_insertion_point(field_mutable:xDB.TableMetadata.definitions)
+  return definitions_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::DBDefinition >*
+TableMetadata::mutable_definitions() {
+  // @@protoc_insertion_point(field_mutable_list:xDB.TableMetadata.definitions)
+  return &definitions_;
+}
+inline const ::xDB::DBDefinition& TableMetadata::_internal_definitions(int index) const {
+  return definitions_.Get(index);
+}
+inline const ::xDB::DBDefinition& TableMetadata::definitions(int index) const {
+  // @@protoc_insertion_point(field_get:xDB.TableMetadata.definitions)
+  return _internal_definitions(index);
+}
+inline ::xDB::DBDefinition* TableMetadata::_internal_add_definitions() {
+  return definitions_.Add();
+}
+inline ::xDB::DBDefinition* TableMetadata::add_definitions() {
+  // @@protoc_insertion_point(field_add:xDB.TableMetadata.definitions)
+  return _internal_add_definitions();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::DBDefinition >&
+TableMetadata::definitions() const {
+  // @@protoc_insertion_point(field_list:xDB.TableMetadata.definitions)
+  return definitions_;
+}
+
+// -------------------------------------------------------------------
+
+// DBDefinition
+
+// optional .xDB.DBDefinition.DefinitionType type = 1;
+inline bool DBDefinition::_internal_has_type() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool DBDefinition::has_type() const {
+  return _internal_has_type();
+}
+inline void DBDefinition::clear_type() {
+  type_ = 1;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::xDB::DBDefinition_DefinitionType DBDefinition::_internal_type() const {
+  return static_cast< ::xDB::DBDefinition_DefinitionType >(type_);
+}
+inline ::xDB::DBDefinition_DefinitionType DBDefinition::type() const {
+  // @@protoc_insertion_point(field_get:xDB.DBDefinition.type)
+  return _internal_type();
+}
+inline void DBDefinition::_internal_set_type(::xDB::DBDefinition_DefinitionType value) {
+  assert(::xDB::DBDefinition_DefinitionType_IsValid(value));
+  _has_bits_[0] |= 0x00000002u;
+  type_ = value;
+}
+inline void DBDefinition::set_type(::xDB::DBDefinition_DefinitionType value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:xDB.DBDefinition.type)
+}
+
+// optional string name = 2;
+inline bool DBDefinition::_internal_has_name() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool DBDefinition::has_name() const {
+  return _internal_has_name();
+}
+inline void DBDefinition::clear_name() {
+  name_.ClearToEmpty(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& DBDefinition::name() const {
+  // @@protoc_insertion_point(field_get:xDB.DBDefinition.name)
+  return _internal_name();
+}
+inline void DBDefinition::set_name(const std::string& value) {
+  _internal_set_name(value);
+  // @@protoc_insertion_point(field_set:xDB.DBDefinition.name)
+}
+inline std::string* DBDefinition::mutable_name() {
+  // @@protoc_insertion_point(field_mutable:xDB.DBDefinition.name)
+  return _internal_mutable_name();
+}
+inline const std::string& DBDefinition::_internal_name() const {
+  return name_.Get();
+}
+inline void DBDefinition::_internal_set_name(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value, GetArena());
+}
+inline void DBDefinition::set_name(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  name_.Set(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value), GetArena());
+  // @@protoc_insertion_point(field_set_rvalue:xDB.DBDefinition.name)
+}
+inline void DBDefinition::set_name(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value),
+              GetArena());
+  // @@protoc_insertion_point(field_set_char:xDB.DBDefinition.name)
+}
+inline void DBDefinition::set_name(const char* value,
+    size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  name_.Set(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(
+      reinterpret_cast<const char*>(value), size), GetArena());
+  // @@protoc_insertion_point(field_set_pointer:xDB.DBDefinition.name)
+}
+inline std::string* DBDefinition::_internal_mutable_name() {
+  _has_bits_[0] |= 0x00000001u;
+  return name_.Mutable(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline std::string* DBDefinition::release_name() {
+  // @@protoc_insertion_point(field_release:xDB.DBDefinition.name)
+  if (!_internal_has_name()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return name_.ReleaseNonDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
+}
+inline void DBDefinition::set_allocated_name(std::string* name) {
+  if (name != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  name_.SetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), name,
+      GetArena());
+  // @@protoc_insertion_point(field_set_allocated:xDB.DBDefinition.name)
+}
+inline std::string* DBDefinition::unsafe_arena_release_name() {
+  // @@protoc_insertion_point(field_unsafe_arena_release:xDB.DBDefinition.name)
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  _has_bits_[0] &= ~0x00000001u;
+  return name_.UnsafeArenaRelease(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      GetArena());
+}
+inline void DBDefinition::unsafe_arena_set_allocated_name(
+    std::string* name) {
+  GOOGLE_DCHECK(GetArena() != nullptr);
+  if (name != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  name_.UnsafeArenaSetAllocated(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      name, GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:xDB.DBDefinition.name)
+}
+
+// -------------------------------------------------------------------
+
+// DBMetadata
+
+// repeated string tables = 1;
+inline int DBMetadata::_internal_tables_size() const {
+  return tables_.size();
+}
+inline int DBMetadata::tables_size() const {
+  return _internal_tables_size();
+}
+inline void DBMetadata::clear_tables() {
+  tables_.Clear();
+}
+inline std::string* DBMetadata::add_tables() {
+  // @@protoc_insertion_point(field_add_mutable:xDB.DBMetadata.tables)
+  return _internal_add_tables();
+}
+inline const std::string& DBMetadata::_internal_tables(int index) const {
+  return tables_.Get(index);
+}
+inline const std::string& DBMetadata::tables(int index) const {
+  // @@protoc_insertion_point(field_get:xDB.DBMetadata.tables)
+  return _internal_tables(index);
+}
+inline std::string* DBMetadata::mutable_tables(int index) {
+  // @@protoc_insertion_point(field_mutable:xDB.DBMetadata.tables)
+  return tables_.Mutable(index);
+}
+inline void DBMetadata::set_tables(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:xDB.DBMetadata.tables)
+  tables_.Mutable(index)->assign(value);
+}
+inline void DBMetadata::set_tables(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:xDB.DBMetadata.tables)
+  tables_.Mutable(index)->assign(std::move(value));
+}
+inline void DBMetadata::set_tables(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  tables_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:xDB.DBMetadata.tables)
+}
+inline void DBMetadata::set_tables(int index, const char* value, size_t size) {
+  tables_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:xDB.DBMetadata.tables)
+}
+inline std::string* DBMetadata::_internal_add_tables() {
+  return tables_.Add();
+}
+inline void DBMetadata::add_tables(const std::string& value) {
+  tables_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:xDB.DBMetadata.tables)
+}
+inline void DBMetadata::add_tables(std::string&& value) {
+  tables_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:xDB.DBMetadata.tables)
+}
+inline void DBMetadata::add_tables(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  tables_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:xDB.DBMetadata.tables)
+}
+inline void DBMetadata::add_tables(const char* value, size_t size) {
+  tables_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:xDB.DBMetadata.tables)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+DBMetadata::tables() const {
+  // @@protoc_insertion_point(field_list:xDB.DBMetadata.tables)
+  return tables_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+DBMetadata::mutable_tables() {
+  // @@protoc_insertion_point(field_mutable_list:xDB.DBMetadata.tables)
+  return &tables_;
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -441,6 +1913,16 @@ template <> struct is_proto_enum< ::xDB::Person_PersonType> : ::std::true_type {
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::xDB::Person_PersonType>() {
   return ::xDB::Person_PersonType_descriptor();
+}
+template <> struct is_proto_enum< ::xDB::Column_ColumnType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::xDB::Column_ColumnType>() {
+  return ::xDB::Column_ColumnType_descriptor();
+}
+template <> struct is_proto_enum< ::xDB::DBDefinition_DefinitionType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::xDB::DBDefinition_DefinitionType>() {
+  return ::xDB::DBDefinition_DefinitionType_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE

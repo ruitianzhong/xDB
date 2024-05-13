@@ -49,6 +49,7 @@ add_executable(${PROJECT_NAME} main.cpp
         execution/execution_result.cpp
         execution/create_executor.cpp
         include/constant.h
+        execution/use_executor.cpp
 )
 
 add_custom_command(
@@ -68,6 +69,8 @@ add_custom_command(
         VERBATIM
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/common/codec)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/rocksdb/include)
 add_custom_target(check
         ./test/xDB_unit_test

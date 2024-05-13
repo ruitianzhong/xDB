@@ -14,7 +14,6 @@ namespace xDB {
 
         ~UseStmt() override;
 
-    private:
         TableName name{};
     };
 }

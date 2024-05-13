@@ -7,8 +7,8 @@
 #define EXECUTOR_H
 #include <rocksdb/db.h>
 
-#include "sql/create_stmt.h"
 #include "sql/parser_result.h"
+#include "sql/stmts.h"
 
 namespace xDB {
     class Executor {
@@ -23,9 +23,13 @@ namespace xDB {
 
         void executeCreateStmt(CreateStmt *create_stmt);
 
+        void executeUseStmt(UseStmt *use_stmt);
+
         bool init();
 
     private:
+        void createTable(CreateStmt *stmt);
+
         std::string currentDB;
         rocksdb::DB *db;
     };

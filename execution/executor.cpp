@@ -25,6 +25,7 @@ namespace xDB {
     bool Executor::dispatch(SQLStmt *stmt) {
         switch (stmt->type()) {
             case xSQL_USE:
+                executeUseStmt(dynamic_cast<UseStmt *>(stmt));
                 break;
             case xSQL_DROP:
                 break;

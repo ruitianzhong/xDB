@@ -8,3 +8,41 @@ message Person{
     STUDENT = 0;
   }
 }
+
+
+message Column{
+  enum ColumnType{
+    COLUMN_INT = 0;
+    COLUMN_CHAR = 1;
+    COLUMN_NULL = 3;
+    COLUMN_FLOAT = 4;
+  }
+
+  optional  ColumnType type = 1;
+  optional  int32 integer_num = 2;
+  optional  string str = 3;
+  optional double float_num = 4;
+}
+
+message Row {
+  repeated Column columns = 1;
+}
+
+message TableMetadata {
+  repeated DBDefinition definitions = 1;
+
+}
+
+message DBDefinition{
+  enum DefinitionType{
+    INTEGER = 1;
+    CHAR = 2;
+    FLOAT = 3;
+  }
+  optional DefinitionType type = 1;
+  optional string name = 2;
+}
+
+message DBMetadata {
+  repeated string tables = 1;
+}
