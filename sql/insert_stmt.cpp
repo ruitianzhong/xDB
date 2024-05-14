@@ -9,7 +9,7 @@ namespace xDB {
         return type;
     }
 
-    Parameter::Parameter(char *str_): str(str_), type(FLOAT) {
+    Parameter::Parameter(char *str_): str(str_), type(CHAR) {
         x = 0;
         d = 0;
     }

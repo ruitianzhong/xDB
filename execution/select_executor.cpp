@@ -4,6 +4,7 @@
 //
 #include <utility>
 
+#include "fort.hpp"
 #include "execution/executor.h"
 
 namespace xDB {
@@ -39,14 +40,14 @@ namespace xDB {
         }
 
         std::string toString() {
-            return db_name.append(".").append(table_name).append(".").append(column_name);
+            return db_name + "." + table_name + "." + column_name;
         }
     };
 
-    static bool MakeTempRow(std::vector<TableFullName> &v, int index, const TempRow &row,
+    static bool MakeTempRow(std::vector<TableFullName> &v, int index, const TempRow &row, // NOLINT(*-no-recursion)
                             std::vector<TempRow> &rows,
                             rocksdb::DB *db) {
-        if (index == v.size()) {
+        if (index == static_cast<int>(v.size())) {
             rows.push_back(row);
             return true;
         }
@@ -171,7 +172,13 @@ namespace xDB {
             // handle wild card
             if (colname == "*") {
                 ColumnFullName c("*", "*", "*");
-                column_full_names.push_back(c);
+                for (const auto &table_full_name: v) {
+                    for (const auto &def: table_full_name.metadata.definitions()) {
+                        ColumnFullName column_full_name(table_full_name.table_schema, table_full_name.table_name,
+                                                        def.name());
+                        column_full_names.push_back(column_full_name);
+                    }
+                }
                 continue;
             }
 
@@ -203,6 +210,45 @@ namespace xDB {
             }
         }
         // build the intermediate row here
-        Row row;
+        TempRow row;
+        std::vector<TempRow> results;
+
+        MakeTempRow(v, 0, row, results, db);
+
+        std::cout << "result count: " << results.size() << std::endl;
+
+        fort::table table;
+        table << fort::header;
+        for (auto col: column_full_names) {
+            table << col.toString();
+        }
+        table << fort::endr;
+
+        for (auto result: results) {
+            for (auto col: column_full_names) {
+                if (column2index.find(col.toString()) == column2index.end()) {
+                    std::cout << "Can not find " << col.toString() << std::endl;
+                    return;
+                }
+                int index = column2index[col.toString()];
+                Column column = result.column(index);
+                switch (column.type()) {
+                    case Column::COLUMN_INT:
+                        table << column.integer_num();
+                        break;
+                    case Column::COLUMN_CHAR:
+                        table << column.str();
+                        break;
+                    case Column::COLUMN_NULL:
+                        table << "NULL";
+                    default:
+                        std::cout << "Some errors occur";
+                        return;
+                }
+            }
+            table << fort::endr;
+        }
+
+        std::cout << table.to_string() << std::endl;
     }
 }

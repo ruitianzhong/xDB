@@ -33,6 +33,12 @@ namespace xDB {
 
         void executeSelectStmt(const SelectStmt *select_stmt) const;
 
+        void executeUpdateStmt(const UpdateStmt *update_stmt) const;
+
+        void executeDeleteStmt(const DeleteStmt *delete_stmt) const;
+
+        void executeDropStmt(const DropStmt *drop_stmt) const;
+
         bool init();
 
         static std::string MakeTableMetadataPrefix(const std::string &dbname, const std::string &table_name) {

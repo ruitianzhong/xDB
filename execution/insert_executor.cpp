@@ -73,7 +73,7 @@ namespace xDB {
         } else if (def.type() == DBDefinition::CHAR && parameter->getType() == CHAR) {
             const auto str = parameter->getChar();
             assert(str!=nullptr);
-            if (strlen(str) > def.charlen()) {
+            if (strlen(str) > static_cast<size_t>(def.charlen())) {
                 std::cout << "Char too long" << std::endl;
                 return false;
             }

@@ -29,11 +29,13 @@ namespace xDB {
                 executeUseStmt(dynamic_cast<UseStmt *>(stmt));
                 break;
             case xSQL_DROP:
+                executeDropStmt(dynamic_cast<DropStmt *>(stmt));
                 break;
             case xSQL_SHOW:
                 executeShowStmt(dynamic_cast<ShowStmt *>(stmt));
                 break;
             case xSQL_DELETE:
+                executeDeleteStmt(dynamic_cast<DeleteStmt *>(stmt));
                 break;
             case xSQL_INSERT:
                 executeInsertStmt(dynamic_cast<InsertStmt *>(stmt));
@@ -46,6 +48,9 @@ namespace xDB {
             case xSQL_SELECT:
                 executeSelectStmt(dynamic_cast<SelectStmt *>(stmt));
                 break;
+            case xSQL_UPDATE:
+                executeUpdateStmt(dynamic_cast<UpdateStmt *>(stmt));
+                break;
             default:
                 std::cout << "Unknown SQL statement type" << std::endl;
                 break;
@@ -54,9 +59,9 @@ namespace xDB {
     }
 
     void Executor::shutdown() const {
-        rocksdb::WaitForCompactOptions opt = rocksdb::WaitForCompactOptions();
+        auto opt = rocksdb::WaitForCompactOptions();
         opt.close_db = true;
-        auto s = db->WaitForCompact(opt);
+        const auto s = db->WaitForCompact(opt);
         assert(s.ok());
         delete db;
     }
