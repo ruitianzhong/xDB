@@ -1119,17 +1119,17 @@ class DBDefinition PROTOBUF_FINAL :
   std::string* _internal_mutable_name();
   public:
 
-  // optional uint64 charLen = 5;
+  // optional int64 charLen = 5;
   bool has_charlen() const;
   private:
   bool _internal_has_charlen() const;
   public:
   void clear_charlen();
-  ::PROTOBUF_NAMESPACE_ID::uint64 charlen() const;
-  void set_charlen(::PROTOBUF_NAMESPACE_ID::uint64 value);
+  ::PROTOBUF_NAMESPACE_ID::int64 charlen() const;
+  void set_charlen(::PROTOBUF_NAMESPACE_ID::int64 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::uint64 _internal_charlen() const;
-  void _internal_set_charlen(::PROTOBUF_NAMESPACE_ID::uint64 value);
+  ::PROTOBUF_NAMESPACE_ID::int64 _internal_charlen() const;
+  void _internal_set_charlen(::PROTOBUF_NAMESPACE_ID::int64 value);
   public:
 
   // optional bool isPrimary = 3;
@@ -1181,7 +1181,7 @@ class DBDefinition PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
-  ::PROTOBUF_NAMESPACE_ID::uint64 charlen_;
+  ::PROTOBUF_NAMESPACE_ID::int64 charlen_;
   bool isprimary_;
   bool isindex_;
   int type_;
@@ -1956,7 +1956,7 @@ inline void DBDefinition::set_isindex(bool value) {
   // @@protoc_insertion_point(field_set:xDB.DBDefinition.isIndex)
 }
 
-// optional uint64 charLen = 5;
+// optional int64 charLen = 5;
 inline bool DBDefinition::_internal_has_charlen() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   return value;
@@ -1965,21 +1965,21 @@ inline bool DBDefinition::has_charlen() const {
   return _internal_has_charlen();
 }
 inline void DBDefinition::clear_charlen() {
-  charlen_ = PROTOBUF_ULONGLONG(0);
+  charlen_ = PROTOBUF_LONGLONG(0);
   _has_bits_[0] &= ~0x00000002u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint64 DBDefinition::_internal_charlen() const {
+inline ::PROTOBUF_NAMESPACE_ID::int64 DBDefinition::_internal_charlen() const {
   return charlen_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::uint64 DBDefinition::charlen() const {
+inline ::PROTOBUF_NAMESPACE_ID::int64 DBDefinition::charlen() const {
   // @@protoc_insertion_point(field_get:xDB.DBDefinition.charLen)
   return _internal_charlen();
 }
-inline void DBDefinition::_internal_set_charlen(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+inline void DBDefinition::_internal_set_charlen(::PROTOBUF_NAMESPACE_ID::int64 value) {
   _has_bits_[0] |= 0x00000002u;
   charlen_ = value;
 }
-inline void DBDefinition::set_charlen(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+inline void DBDefinition::set_charlen(::PROTOBUF_NAMESPACE_ID::int64 value) {
   _internal_set_charlen(value);
   // @@protoc_insertion_point(field_set:xDB.DBDefinition.charLen)
 }

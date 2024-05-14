@@ -44,6 +44,7 @@ namespace xDB {
             case xSQL_EXIT:
                 return false;
             case xSQL_SELECT:
+                executeSelectStmt(dynamic_cast<SelectStmt *>(stmt));
                 break;
             default:
                 std::cout << "Unknown SQL statement type" << std::endl;
@@ -78,5 +79,19 @@ namespace xDB {
 
         // status = db->Delete(rocksdb::WriteOptions(), "1");
         // assert(status.ok());
+    }
+
+    Column TempRow::column(int index) {
+        return columns_[index];
+    }
+
+    void TempRow::addColumn(const Column &column) {
+        columns_.push_back(column);
+    }
+
+    void TempRow::addColumns(const Row &row) {
+        for (const auto &col: row.columns()) {
+            columns_.push_back(col);
+        }
     }
 }

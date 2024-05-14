@@ -33,6 +33,14 @@ DELETE FROM user WHERE id=42;
 DROP TABLE user;
 ```
 
+More details:
+
+```sql
+use test;
+select * from test.table1,table1;-- duplicated table (It is correctly checked)
+```
+
+
 ## Build
 
 ```shell

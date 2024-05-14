@@ -52,6 +52,7 @@ add_executable(${PROJECT_NAME} main.cpp
         execution/use_executor.cpp
         execution/show_executor.cpp
         execution/insert_executor.cpp
+        execution/select_executor.cpp
 )
 
 add_custom_command(

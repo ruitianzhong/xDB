@@ -31,6 +31,8 @@ namespace xDB {
 
         void executeInsertStmt(const InsertStmt *insert_stmt) const;
 
+        void executeSelectStmt(const SelectStmt *select_stmt) const;
+
         bool init();
 
         static std::string MakeTableMetadataPrefix(const std::string &dbname, const std::string &table_name) {
@@ -60,6 +62,19 @@ namespace xDB {
     class ExecutionResult {
     public:
         bool ok();
+    };
+
+    class TempRow {
+    public:
+        void addColumn(const Column &column);
+
+
+        Column column(int index);
+
+        void addColumns(const Row &row);
+
+    private:
+        std::vector<Column> columns_;
     };
 }
 
