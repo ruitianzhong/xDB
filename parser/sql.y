@@ -55,6 +55,7 @@ using namespace xDB;
 %type<column_name> column_name
 %type<column_name_list> column_list opt_column_list select_comma_list_with_star select_comma_list
 %type<insert_values_list> insert_values
+%type<all_params_list> insert_values_list
 
 %left OR
 %left AND
@@ -102,6 +103,7 @@ using namespace xDB;
     UpdateAssign * update_assign;
     std::vector<UpdateAssign*> * update_assign_list;
     UpdateStmt * update_stmt;
+    std::vector<std::vector<Parameter*>*>* all_params_list;
 }
 
 
@@ -122,8 +124,8 @@ statement
 : create_statement { $$ = $1 ;}
 | insert_statement { $$ =$1;}
 | drop_statement { printf("drop stmt\n"); $$ = $1;}
-| show_statement { printf("show_statement\n");$$ = $1;}
-| use_statement { printf("use_statement\n"); $$ = $1;}
+| show_statement { $$ = $1;}
+| use_statement {  $$ = $1;}
 | update_statement { printf("update_statement\n"); $$ = $1;}
 | select_statement {  $$ = $1;}
 | delete_statement { $$ = $1; }
@@ -316,9 +318,20 @@ type
  /****** INSERT statement ******/
 
 insert_statement
-: INSERT INTO table_name opt_column_list VALUES '(' insert_values ')' ';'  {
-    $$ = new InsertStmt($3,$4,$7);
+: INSERT INTO table_name opt_column_list VALUES insert_values_list ';'  {
+    $$ = new InsertStmt($3,$4,$6);
  }
+
+insert_values_list
+: '(' insert_values ')'  {
+    $$ = new std::vector<std::vector<Parameter*>*>();
+    $$->push_back($2);
+}
+| insert_values_list ',' '(' insert_values ')' {
+    $$ = $1;
+    $$->push_back($4);
+}
+
 
 insert_values
 : insert_values ',' insert_value {

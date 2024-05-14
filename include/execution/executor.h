@@ -5,6 +5,7 @@
 
 #ifndef EXECUTOR_H
 #define EXECUTOR_H
+#include <db.pb.h>
 #include <rocksdb/db.h>
 
 #include "constant.h"
@@ -22,7 +23,7 @@ namespace xDB {
 
         void shutdown() const;
 
-        void executeCreateStmt(CreateStmt *create_stmt) const;
+        void executeCreateStmt(const CreateStmt *create_stmt) const;
 
         void executeUseStmt(const UseStmt *use_stmt);
 
@@ -42,7 +43,11 @@ namespace xDB {
         }
 
     private:
-        void createTable(CreateStmt *stmt) const;
+        static bool handleEachParam(const TableMetadata &metadata, std::vector<Parameter *> *param,
+                                    const InsertStmt *stmt,
+                                    Row &row);
+
+        void createTable(const CreateStmt *stmt) const;
 
         void showTables() const;
 

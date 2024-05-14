@@ -43,9 +43,9 @@ namespace xDB {
     }
 
     InsertStmt::InsertStmt(TableName table_name_, std::vector<ColumnName *> *optColumnName,
-                           std::vector<Parameter *> *para)
+                           std::vector<std::vector<Parameter *> *> *params)
         : SQLStmt(xSQL_INSERT), table_name(table_name_),
-          opt_column_names(optColumnName), parameters(para) {
+          opt_column_names(optColumnName), parameters(params) {
     }
 
     InsertStmt::~InsertStmt() = default;

@@ -11,7 +11,7 @@
 #include "constant.h"
 
 namespace xDB {
-    void static createDatabase(CreateStmt *stmt, rocksdb::DB *db) {
+    void static createDatabase(const CreateStmt *stmt, rocksdb::DB *db) {
         std::string v;
         rocksdb::ReadOptions options;
         auto s = db->Get(rocksdb::ReadOptions(), Executor::MakeDBMetadataPrefix(stmt->name.schema), &v);
@@ -32,14 +32,15 @@ namespace xDB {
 
         for (const auto &def: *stmt->list) {
             assert(def->data_name!=nullptr);
-            const auto ret = s.find(def->data_name);
-            if (ret != s.end()) {
+
+            if (const auto ret = s.find(def->data_name); ret != s.end()) {
                 std::cout << "duplcated variable definition `" << def->data_name << "`" << std::endl;
                 return false;
             }
             s.insert(def->data_name);
 
             DBDefinition *dbd = metadata->add_definitions();
+            CharDefinition *cd;
             dbd->set_name(def->data_name);
             switch (def->type) {
                 case INTEGER:
@@ -47,16 +48,22 @@ namespace xDB {
                     break;
                 case CHAR:
                     dbd->set_type(DBDefinition::CHAR);
+                    cd = dynamic_cast<CharDefinition *>(def);
+                    assert(cd!=nullptr);
+                    dbd->set_charlen(cd->getLen());
                     break;
                 case FLOAT:
                     dbd->set_type(DBDefinition::FLOAT);
+                    break;
+                default:
+                    break;
             }
         }
         return true;
     }
 
 
-    void Executor::createTable(CreateStmt *stmt) const {
+    void Executor::createTable(const CreateStmt *stmt) const {
         assert(stmt->name.name!=nullptr);
         std::string cur = currentDB;
         if (stmt->name.schema != nullptr) {
@@ -83,13 +90,13 @@ namespace xDB {
             assert(s.ok());
             std::cout << "`" << cur << "." << stmt->name.name << "` created" << std::endl;
         }
-        if (!s.IsNotFound()) {
+        if (!s.ok()) {
             std::cout << "Unexpected error: " << s.ToString() << std::endl;
         }
     }
 
 
-    void Executor::executeCreateStmt(CreateStmt *create_stmt) const {
+    void Executor::executeCreateStmt(const CreateStmt *create_stmt) const {
         assert(create_stmt!=nullptr);
         switch (create_stmt->createType) {
             case CreateDatabase:

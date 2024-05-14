@@ -13,15 +13,16 @@ namespace xDB {
 
     class InsertStmt final : public SQLStmt {
     public:
-        InsertStmt(TableName table_name, std::vector<ColumnName *> *optColumnName, std::vector<Parameter *> *para);
+        InsertStmt(TableName table_name_, std::vector<ColumnName *> *optColumnName,
+                   std::vector<std::vector<Parameter *> *> *params);
 
         ~InsertStmt() override;
 
         TableName table_name;
 
-        std::vector<ColumnName *>* opt_column_names;
+        std::vector<ColumnName *> *opt_column_names;
 
-        std::vector<Parameter *> *parameters;
+        std::vector<std::vector<Parameter *> *> *parameters;
     };
 
 
@@ -49,6 +50,5 @@ namespace xDB {
         double d;
         DataType type;
     };
-
 }
 #endif //INSERT_STMT_H
