@@ -37,7 +37,7 @@ namespace xDB {
 
         void executeDeleteStmt(const DeleteStmt *delete_stmt) const;
 
-        void executeDropStmt(const DropStmt *drop_stmt) const;
+        void executeDropStmt(const DropStmt *drop_stmt);
 
         bool init();
 
@@ -60,6 +60,10 @@ namespace xDB {
         void showTables() const;
 
         void showDatabases() const;
+
+        void dropTable(const DropStmt *drop_stmt) const;
+
+        void dropDatabase(const DropStmt *drop_stmt);
 
         std::string currentDB;
         rocksdb::DB *db;
