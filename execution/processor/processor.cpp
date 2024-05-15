@@ -9,5 +9,7 @@ namespace xDB {
     }
 
     bool ExpProcessor::process(BetweenExpr *between_expr) {
+        std::cout << "between is not supported yet" << std::endl;
+        return false;
     }
 }

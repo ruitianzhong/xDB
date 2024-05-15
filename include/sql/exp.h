@@ -154,15 +154,23 @@ namespace xDB {
 
         void visit(ExpProcessor processor) override;
 
+        [[nodiscard]] ScalarType getType() const { return type; }
+
+        [[nodiscard]] int getInteger() const { return integer; }
+
+        [[nodiscard]] double getFloat() const { return d; }
+
+        [[nodiscard]] std::string getStr() const { return str; }
+
+        [[nodiscard]] std::string getFullname() const { return fullname; }
+
     private:
         ScalarType type;
         ColumnName *column_name;
         char *str;
         int integer;
         double d;
-    };
-
-    class ExecutionContext {
+        std::string fullname;
     };
 }
 #endif //EXP_H

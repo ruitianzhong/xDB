@@ -12,43 +12,166 @@ namespace xDB {
         return exp1->getValue().getType() == exp2->getValue().getType();
     }
 
+
+    static bool processNumeric(BinaryExp *exp, const Value &left, const Value &right) {
+        if (left.getType() != ScalarInteger || right.getType() != ScalarInteger) {
+            std::cout << "Warning : Not a number" << std::endl;
+            exp->setValue(Value::MakeNullValue());
+            return true;
+        }
+        const int lv = left.getInteger(), rv = right.getInteger();
+        int result;
+        switch (exp->binaryType()) {
+            case BinaryAdd:
+                result = lv + rv;
+                break;
+            case BinaryMul:
+                result = lv * rv;
+                break;
+            case BinaryDiv:
+                if (rv == 0) {
+                    std::cout << "Divide by zero" << std::endl;
+                    return false;
+                }
+                result = lv / rv;
+                break;
+
+            case BinarySub:
+                result = lv - rv;
+                break;
+            case BinaryXOR:
+                result = lv ^ rv;
+                break;
+            case BinaryOR:
+                result = lv | rv;
+                break;
+            case BinaryModulo:
+                if (rv == 0) {
+                    std::cout << "Divide by zero error" << std::endl;
+                    return false;
+                }
+                result = lv % rv;
+                break;
+            default:
+                assert(false);
+        }
+        const Value v(result);
+        exp->setValue(v);
+        return true;
+    }
+
+    static int transfer(bool ok) {
+        if (ok) { return 1; }
+        return 0;
+    }
+
+    static bool processIntegerRelExp(BinaryExp *binary_exp, const Value &left, const Value &right) {
+        const int lv = left.getInteger(), rv = right.getInteger();
+        int result;
+        switch (binary_exp->binaryType()) {
+            case BinaryEquals:
+                result = transfer(lv == rv);
+                break;
+            case BinaryGreat:
+                result = transfer(lv > rv);
+                break;
+            case BinaryLess:
+                result = transfer(lv < rv);
+                break;
+            case BinaryGreatEQ:
+                result = transfer(lv >= rv);
+                break;
+            case BinaryNotEquals:
+                result = transfer(lv != rv);
+                break;
+            case BinaryAND:
+                result = transfer(lv != 0 && rv != 0);
+                break;
+            case BinaryLessEQ:
+                result = transfer(lv <= rv);
+                break;
+            case BinaryOR:
+                result = transfer(lv != 0 || rv != 0);
+                break;
+            default:
+                assert(false);
+        }
+
+        binary_exp->setValue(Value(result));
+        return true;
+    }
+
+    static bool processCharRelExp(BinaryExp *binary_exp, const Value &left, const Value &right) {
+        const std::string lv = left.getChar(), rv = right.getChar();
+        int result;
+        switch (binary_exp->binaryType()) {
+            case BinaryEquals:
+                result = transfer(lv == rv);
+                break;
+            case BinaryGreat:
+                result = transfer(lv > rv);
+                break;
+            case BinaryLess:
+                result = transfer(lv < rv);
+                break;
+            case BinaryGreatEQ:
+                result = transfer(lv >= rv);
+                break;
+            case BinaryNotEquals:
+                result = transfer(lv != rv);
+                break;
+            case BinaryAND:
+                std::cout << "Op `AND` is not supported on CHAR" << std::endl;
+                return false;
+            case BinaryLessEQ:
+                result = transfer(lv <= rv);
+                break;
+            case BinaryOR:
+                std::cout << "Op `OR` is not supported on CHAR" << std::endl;
+                return false;
+            default:
+                assert(false);
+        }
+
+        binary_exp->setValue(Value(result));
+        return true;
+    }
+
     bool ExpProcessor::process(BinaryExp *binary_exp) {
         if (!checkIsSameType(binary_exp->getLeft(), binary_exp->getRight())) {
             return false;
         }
+
+        Value left = binary_exp->getLeft()->getValue(), right = binary_exp->getRight()->getValue();
         switch (binary_exp->binaryType()) {
             case BinaryAdd:
-                break;
             case BinaryMul:
-                break;
             case BinaryDiv:
-                break;
             case BinarySub:
-                break;
-            case BinaryEquals:
-                break;
             case BinaryXOR:
-                break;
-            case BinaryGreat:
-                break;
-            case BinaryLess:
-                break;
-            case BinaryGreatEQ:
-                break;
-            case BinaryOR:
-                break;
             case BinaryModulo:
-                break;
+                return processNumeric(binary_exp, left, right);
+            case BinaryEquals:
+            case BinaryGreat:
+            case BinaryLess:
+            case BinaryGreatEQ:
             case BinaryNotEquals:
-                break;
             case BinaryAND:
-                break;
             case BinaryLessEQ:
-                break;
+            case BinaryOR:
+                if (left.getType() == ScalarInteger && right.getType() == ScalarInteger) {
+                    return processIntegerRelExp(binary_exp, left, right);
+                }
+                if (left.getType() == ScalarChar && right.getType() == ScalarChar) {
+                    return processCharRelExp(binary_exp, left, right);
+                }
+                binary_exp->setValue(Value::MakeNullValue());
+                return true;
+
+            // Note that NULL seems to be incomparable in MySQL.
             default:
                 std::cout << "Unknown binary exp" << std::endl;
                 return false;
         }
-        return false;
     }
 }

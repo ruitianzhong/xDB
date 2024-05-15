@@ -14,8 +14,31 @@
 
 namespace xDB {
     // forward declaration
-    class TempRow;
+    class TempRow {
+    public:
+        void addColumn(const Column &column);
 
+
+        Column column(int index);
+
+        void addColumns(const Row &row);
+
+    private:
+        std::vector<Column> columns_;
+    };
+
+    class ExecutionContext {
+    public:
+        ExecutionContext(TempRow temp_row, std::unordered_map<std::string, int> fullname2index);
+
+        std::unordered_map<std::string, int> fullname2index() { return fullname2index_; }
+
+        Column column(const int index) { return row.column(index); }
+
+    private:
+        std::unordered_map<std::string, int> fullname2index_;
+        TempRow row;
+    };
 
     struct ColumnFullName {
         std::string table_name, db_name, column_name;
@@ -94,18 +117,6 @@ namespace xDB {
         bool ok();
     };
 
-    class TempRow {
-    public:
-        void addColumn(const Column &column);
-
-
-        Column column(int index);
-
-        void addColumns(const Row &row);
-
-    private:
-        std::vector<Column> columns_;
-    };
 
     class ExpProcessor {
     public:
@@ -129,6 +140,8 @@ namespace xDB {
         bool processNot(UnaryExp *exp);
 
         bool processIsNotNull(UnaryExp *exp);
+
+        bool processScalarName(ScalarExp *scalar_exp);
     };
 }
 

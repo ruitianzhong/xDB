@@ -6,6 +6,7 @@
 #include "execution/executor.h"
 
 #include <iostream>
+#include <utility>
 
 
 #include "sql/parser_result.h"
@@ -168,5 +169,10 @@ namespace xDB {
             m[metadata.definitions(i).name()] = i;
         }
         return true;
+    }
+
+    ExecutionContext::ExecutionContext(TempRow temp_row,
+                                       std::unordered_map<std::string, int> fullname2index) : fullname2index_(
+        std::move(fullname2index)), row(std::move(temp_row)) {
     }
 }
