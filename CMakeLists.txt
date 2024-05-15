@@ -61,6 +61,7 @@ add_executable(${PROJECT_NAME} main.cpp
         execution/processor/binary_processor.cpp
         execution/processor/unary_processor.cpp
         execution/processor/scalar_processor.cpp
+        execution/eval_exp.cpp
 )
 
 add_custom_command(

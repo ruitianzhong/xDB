@@ -77,11 +77,13 @@ namespace xDB {
     public:
         virtual ~Exp();
 
-        virtual void visit(ExpProcessor processor) =0;
+        virtual bool visit(ExpProcessor *processor) =0;
 
         void setValue(Value v);
 
         [[nodiscard]] Value getValue();
+
+        [[nodiscard]] ExpType getExpType() const { return expType; }
 
     protected:
         explicit Exp(ExpType type_);
@@ -97,7 +99,7 @@ namespace xDB {
     public:
         BetweenExpr(Exp *exp1_, Exp *exp2_, Exp *exp3_);
 
-        void visit(ExpProcessor processor) override;
+        bool visit(ExpProcessor *processor) override;
 
         [[nodiscard]] Exp *getExp1() const { return exp1; }
         [[nodiscard]] Exp *getExp2() const { return exp2; }
@@ -114,7 +116,7 @@ namespace xDB {
 
         [[nodiscard]] BinaryExpType binaryType() const;
 
-        void visit(ExpProcessor processor) override;
+        bool visit(ExpProcessor *processor) override;
 
         [[nodiscard]] Exp *getLeft() const { return left; }
         [[nodiscard]] Exp *getRight() const { return right; }
@@ -130,7 +132,9 @@ namespace xDB {
 
         [[nodiscard]] UnaryExpType unaryType() const;
 
-        void visit(ExpProcessor processor) override;
+        bool visit(ExpProcessor *processor) override;
+
+        [[nodiscard]] Exp *getExp() const { return exp; }
 
     private:
         Exp *exp;
@@ -152,7 +156,7 @@ namespace xDB {
 
         [[nodiscard]] ScalarType scalarType() const;
 
-        void visit(ExpProcessor processor) override;
+        bool visit(ExpProcessor *processor) override;
 
         [[nodiscard]] ScalarType getType() const { return type; }
 
