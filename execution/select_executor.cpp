@@ -241,6 +241,7 @@ namespace xDB {
                         break;
                     case Column::COLUMN_NULL:
                         table << "NULL";
+                        break;
                     default:
                         std::cout << "Some errors occur";
                         return;

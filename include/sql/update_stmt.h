@@ -14,7 +14,6 @@ namespace xDB {
     public:
         UpdateAssign(ColumnName *column_name_, Exp *right_);
 
-    private:
         ColumnName *column_name;
 
         Exp *right;
@@ -26,7 +25,6 @@ namespace xDB {
 
         ~UpdateStmt() override;
 
-    private:
         TableName table_name;
         std::vector<UpdateAssign *> *update_assigns;
         Exp *whereExp;

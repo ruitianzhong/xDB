@@ -14,7 +14,6 @@ namespace xDB {
 
         ~DeleteStmt() override;
 
-    private:
         TableName table_name;
         Exp *whereExp;
     };

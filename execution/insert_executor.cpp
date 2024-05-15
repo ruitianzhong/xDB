@@ -105,17 +105,17 @@ namespace xDB {
         std::unordered_map<std::string, int> nameMap;
         for (int i = 0; i < metadata.definitions_size(); i++) {
             const auto &def = metadata.definitions(i);
-            nameMap.insert({def.name(), 0});
+            nameMap.insert({def.name(), -1});
         }
         if (stmt->opt_column_names != nullptr) {
             for (int i = 0; i < static_cast<int>(stmt->opt_column_names->size()); i++) {
-                auto name = stmt->opt_column_names->at(i);
+                const auto name = stmt->opt_column_names->at(i);
                 assert(name!=nullptr && name->column_name!=nullptr);
                 if (nameMap.find(name->column_name) == nameMap.end()) {
                     std::cout << "Unknown column name" << std::endl;
                     return false;
                 }
-                nameMap.insert({name->column_name, i});
+                nameMap[name->column_name] = i;
             }
         }
 
@@ -125,9 +125,14 @@ namespace xDB {
             if (stmt->opt_column_names == nullptr) {
                 checkMap.insert({metadata.definitions(i).name(), param->at(i)});
             } else {
+                const int index = nameMap[metadata.definitions(i).name()];
+                if (index == -1) {
+                    continue;
+                }
+
                 checkMap.insert({
                     metadata.definitions(i).name(),
-                    param->at(nameMap[metadata.definitions(i).name()])
+                    param->at(index)
                 });
             }
         }

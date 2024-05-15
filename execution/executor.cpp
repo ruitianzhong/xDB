@@ -99,4 +99,60 @@ namespace xDB {
             columns_.push_back(col);
         }
     }
+
+    bool Executor::checkTable(TableName table_name, std::string &cur, std::string &table) const {
+        assert(table_name.name!=nullptr);
+        if (table_name.schema == nullptr && currentDB.empty()) {
+            std::cout << "No database selected" << std::endl;
+            return false;
+        }
+        cur = table_name.schema == nullptr ? currentDB : table_name.schema;
+        table = table_name.name;
+
+
+        std::string value, key = MakeTableMetadataPrefix(cur, table);
+
+        auto status = db->Get(rocksdb::ReadOptions(), key, &value);
+
+        if (status.IsNotFound()) {
+            std::cout << "Table does not exist" << std::endl;
+            return false;
+        }
+        if (!status.ok()) {
+            std::cout << "[ Error ] " << status.ToString() << std::endl;
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Executor::collectTableAllRows(std::vector<TempRow> &rows, const std::string &dbname,
+                                       const std::string &tablename) const {
+        const std::string rowPrefix = TABLE_ROW_PREFIX + dbname + tablename;
+
+        const auto it = db->NewIterator(rocksdb::ReadOptions());
+        for (it->Seek(rowPrefix); it->Valid(); it->Next()) {
+            auto s = it->key().ToString();
+            if (s.rfind(rowPrefix, 0) != 0) {
+                break;
+            }
+            TempRow temp_row;
+            Row row;
+            if (!row.ParseFromString(it->value().data())) {
+                std::cout << "[ Codec error ]" << std::endl;
+                delete it;
+                return false;
+            }
+            temp_row.addColumns(row);
+
+            rows.push_back(temp_row);
+        }
+
+        if (!it->status().ok()) {
+            std::cout << "[ Warning ] " << it->status().ToString();
+        }
+
+        delete it;
+        return true;
+    }
 }
