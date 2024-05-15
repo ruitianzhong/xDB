@@ -44,6 +44,7 @@ add_executable(${PROJECT_NAME} main.cpp
         sql/delete_stmt.cpp
         sql/update_stmt.cpp
         common/codec/db.pb.cc
+        common/codec/db.pb.h
         include/execution/executor.h
         execution/executor.cpp
         execution/execution_result.cpp
@@ -56,6 +57,10 @@ add_executable(${PROJECT_NAME} main.cpp
         execution/delete_executor.cpp
         execution/drop_executor.cpp
         execution/update_executor.cpp
+        execution/processor/processor.cpp
+        execution/processor/binary_processor.cpp
+        execution/processor/unary_processor.cpp
+        execution/processor/scalar_processor.cpp
 )
 
 add_custom_command(
@@ -101,6 +106,7 @@ add_library(${PROJECT_NAME}_lib STATIC
         common/codec/db.pb.cc
 )
 target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME}_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/common/codec)
 
 add_subdirectory(test)
 add_subdirectory(third_party/googletest)

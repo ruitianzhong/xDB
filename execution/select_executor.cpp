@@ -31,18 +31,16 @@ namespace xDB {
     };
 
 
-    struct ColumnFullName {
-        std::string table_name, db_name, column_name;
+    ColumnFullName::ColumnFullName(std::string db_name, std::string table_name,
+                                   std::string column_name): table_name(std::move(table_name)),
+                                                             db_name(std::move(db_name)),
+                                                             column_name(std::move(column_name)) {
+    }
 
-        ColumnFullName(std::string db_name, std::string table_name,
-                       std::string column_name): table_name(std::move(table_name)),
-                                                 db_name(std::move(db_name)), column_name(std::move(column_name)) {
-        }
+    std::string ColumnFullName::toString() const {
+        return db_name + "." + table_name + "." + column_name;
+    }
 
-        std::string toString() {
-            return db_name + "." + table_name + "." + column_name;
-        }
-    };
 
     static bool MakeTempRow(std::vector<TableFullName> &v, int index, const TempRow &row, // NOLINT(*-no-recursion)
                             std::vector<TempRow> &rows,

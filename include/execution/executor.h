@@ -5,7 +5,7 @@
 
 #ifndef EXECUTOR_H
 #define EXECUTOR_H
-#include <db.pb.h>
+#include "db.pb.h"
 #include <rocksdb/db.h>
 
 #include "constant.h"
@@ -15,6 +15,16 @@
 namespace xDB {
     // forward declaration
     class TempRow;
+
+
+    struct ColumnFullName {
+        std::string table_name, db_name, column_name;
+
+        ColumnFullName(std::string db_name, std::string table_name,
+                       std::string column_name);
+
+        [[nodiscard]] std::string toString() const;
+    };
 
     class Executor {
     public:
@@ -68,10 +78,12 @@ namespace xDB {
 
         void dropDatabase(const DropStmt *drop_stmt);
 
-        bool checkTable(TableName table_name, std::string &cur, std::string &table) const;
+        bool checkTable(TableName table_name, std::string &cur, std::string &table, TableMetadata &metadata) const;
 
         bool collectTableAllRows(std::vector<TempRow> &rows, const std::string &dbname,
                                  const std::string &tablename) const;
+
+        static bool buildColumnName2IndexMap(std::unordered_map<std::string, int> m, const TableMetadata &metadata);
 
         std::string currentDB;
         rocksdb::DB *db;
@@ -93,6 +105,30 @@ namespace xDB {
 
     private:
         std::vector<Column> columns_;
+    };
+
+    class ExpProcessor {
+    public:
+        explicit ExpProcessor(ExecutionContext context);
+
+        bool process(BinaryExp *binary_exp);
+
+        bool process(UnaryExp *unary_exp);
+
+        bool process(BetweenExpr *between_expr);
+
+        bool process(ScalarExp *scalar_exp);
+
+    private:
+        ExecutionContext context_;
+
+        bool processNegate(UnaryExp *exp);
+
+        bool processIsNull(UnaryExp *exp);
+
+        bool processNot(UnaryExp *exp);
+
+        bool processIsNotNull(UnaryExp *exp);
     };
 }
 
