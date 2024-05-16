@@ -58,10 +58,11 @@ add_executable(${PROJECT_NAME} main.cpp
         execution/drop_executor.cpp
         execution/update_executor.cpp
         execution/processor/processor.cpp
-        execution/processor/binary_processor.cpp
-        execution/processor/unary_processor.cpp
-        execution/processor/scalar_processor.cpp
-        execution/eval_exp.cpp
+        execution/processor/binary_evaluator.cpp
+        execution/processor/unary_evaluator.cpp
+        execution/processor/scalar_evaluator.cpp
+        execution/processor/visit_exp.cpp
+        execution/processor/exp_checker.cpp
 )
 
 add_custom_command(

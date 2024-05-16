@@ -8,6 +8,8 @@
 #include "db.pb.h"
 #include <rocksdb/db.h>
 
+#include <utility>
+
 #include "constant.h"
 #include "sql/parser_result.h"
 #include "sql/stmts.h"
@@ -108,15 +110,15 @@ namespace xDB {
 
         static bool buildColumnName2IndexMap(std::unordered_map<std::string, int> m, const TableMetadata &metadata);
 
-        bool evaluateExp(Exp *exp, ExpProcessor *processor);
+        bool visitExp(Exp *exp, AbstractExpProcessor *processor);
 
-        bool evaluateBetween(BetweenExpr *between_expr, ExpProcessor *processorr);
+        bool visitBetween(BetweenExpr *between_expr, AbstractExpProcessor *processor);
 
-        static bool evaluateScalar(ScalarExp *exp, ExpProcessor *processor);
+        static bool visitScalar(ScalarExp *exp, AbstractExpProcessor *processor);
 
-        bool evaluateBinary(BinaryExp *exp, ExpProcessor *processor);
+        bool visitBinary(BinaryExp *exp, AbstractExpProcessor *processor);
 
-        bool evaluateUnary(UnaryExp *exp, ExpProcessor *processor);
+        bool visitUnary(UnaryExp *exp, AbstractExpProcessor *processor);
 
 
         std::string currentDB;
@@ -129,20 +131,44 @@ namespace xDB {
     };
 
 
-    class ExpProcessor {
+    class AbstractExpProcessor {
     public:
-        explicit ExpProcessor(ExecutionContext context);
+        explicit AbstractExpProcessor(ExecutionContext context);
 
-        bool process(BinaryExp *binary_exp);
+        virtual bool process(BinaryExp *binary_exp);
 
-        bool process(UnaryExp *unary_exp);
+        virtual bool process(UnaryExp *unary_exp);
 
-        bool process(BetweenExpr *between_expr);
+        virtual bool process(BetweenExpr *between_expr);
 
-        bool process(ScalarExp *scalar_exp);
+        virtual bool process(ScalarExp *scalar_exp);
+
+        virtual ~AbstractExpProcessor() = default;
+
+    protected:
+        ExecutionContext context_;
 
     private:
-        ExecutionContext context_;
+    };
+
+    class ExpChecker : public AbstractExpProcessor {
+        explicit ExpChecker(ExecutionContext context): AbstractExpProcessor(std::move(context)) {
+        }
+
+        bool process(ScalarExp *scalar_exp) override;
+    };
+
+    class ExpEvaluator : public AbstractExpProcessor {
+        explicit ExpEvaluator(ExecutionContext context): AbstractExpProcessor(std::move(context)) {
+        }
+
+        bool process(UnaryExp *unary_exp) override;
+
+        bool process(BetweenExpr *between_expr) override;
+
+        bool process(BinaryExp *binary_exp) override;
+
+        bool process(ScalarExp *scalar_exp) override;
 
         bool processNegate(UnaryExp *exp);
 

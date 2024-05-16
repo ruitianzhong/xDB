@@ -31,7 +31,7 @@ namespace xDB {
                                                                          right(right_) {
     }
 
-    bool BinaryExp::visit(ExpProcessor *processor) {
+    bool BinaryExp::visit(AbstractExpProcessor *processor) {
         return processor->process(this);
     }
 
@@ -40,7 +40,7 @@ namespace xDB {
         return type;
     }
 
-    bool UnaryExp::visit(ExpProcessor *processor) {
+    bool UnaryExp::visit(AbstractExpProcessor *processor) {
         return processor->process(this);
     }
 
@@ -52,7 +52,7 @@ namespace xDB {
                                                                   exp3(exp3_) {
     }
 
-    bool BetweenExpr::visit(ExpProcessor* processor) {
+    bool BetweenExpr::visit(AbstractExpProcessor* processor) {
         return processor->process(this);
     }
 
@@ -79,7 +79,7 @@ namespace xDB {
         column_name = column_name_;
     }
 
-    bool ScalarExp::visit(ExpProcessor* processor) {
+    bool ScalarExp::visit(AbstractExpProcessor* processor) {
         return processor->process(this);
     }
 

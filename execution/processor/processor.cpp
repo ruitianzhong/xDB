@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "sql/exp.h"
 #include "execution/executor.h"
 //
@@ -5,12 +7,27 @@
 // Copyright (c) 2024 ruitianzhong All rights reserved.
 //
 namespace xDB {
-    ExpProcessor::ExpProcessor(ExecutionContext context): context_(context) {
+    AbstractExpProcessor::AbstractExpProcessor(ExecutionContext context): context_(std::move(context)) {
     }
 
-    bool ExpProcessor::process(BetweenExpr *between_expr) {
+    bool ExpEvaluator::process(BetweenExpr *between_expr) {
         std::cout << "between is not supported yet" << std::endl;
         return false;
     }
 
+    bool AbstractExpProcessor::process(ScalarExp *scalar_exp) {
+        return true;
+    }
+
+    bool AbstractExpProcessor::process(BetweenExpr *between_expr) {
+        return true;
+    }
+
+    bool AbstractExpProcessor::process(BinaryExp *binary_exp) {
+        return true;
+    }
+
+    bool AbstractExpProcessor::process(UnaryExp *unary_exp) {
+        return true;
+    }
 }
