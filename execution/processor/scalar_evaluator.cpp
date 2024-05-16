@@ -30,11 +30,11 @@ namespace xDB {
 
     bool ExpEvaluator::processScalarName(ScalarExp *scalar_exp) {
         auto m = context_.fullname2index();
-        if (m.find(scalar_exp->getFullname()) == m.end()) {
-            std::cout << "Unexpected error: " << scalar_exp->getFullname();
+        if (m.find(scalar_exp->getColumnFullName()) == m.end()) {
+            std::cout << "Unexpected error: " << std::endl;
             return false;
         }
-        const int index = m[scalar_exp->getFullname()];
+        const int index = m[scalar_exp->getColumnFullName()];
 
         Column column = context_.column(index);
         switch (column.type()) {

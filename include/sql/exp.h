@@ -5,11 +5,33 @@
 #ifndef EXP_H
 #define EXP_H
 #include <string>
+#include <utility>
 #include "table.h"
 
 namespace xDB {
     // forward declaration
     class AbstractExpProcessor;
+
+    struct ColumnFullName {
+        std::string table_name, db_name, column_name;
+
+        ColumnFullName(std::string db_name, std::string table_name,
+                       std::string column_name);
+
+        ColumnFullName() = default;
+
+        [[nodiscard]] std::string toString() const;
+
+        bool operator==(const ColumnFullName &full_name) const {
+            return full_name.toString() == this->toString();
+        }
+    };
+
+    struct ColumnFullNameHasher {
+        size_t operator()(const ColumnFullName &full_name) const {
+            return std::hash<std::string>()(full_name.toString());
+        }
+    };
 
     enum ScalarType {
         ScalarChar,
@@ -166,7 +188,11 @@ namespace xDB {
 
         [[nodiscard]] std::string getStr() const { return str; }
 
-        [[nodiscard]] std::string getFullname() const { return fullname; }
+        [[nodiscard]] ColumnName *getColumnName() const { return column_name; }
+
+        void setFullColumnName(ColumnFullName column_full_name) { full_name_ = std::move(column_full_name); }
+
+        ColumnFullName getColumnFullName() { return full_name_; }
 
     private:
         ScalarType type;
@@ -174,7 +200,7 @@ namespace xDB {
         char *str;
         int integer;
         double d;
-        std::string fullname;
+        ColumnFullName full_name_;
     };
 }
 #endif //EXP_H

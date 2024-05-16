@@ -172,7 +172,15 @@ namespace xDB {
     }
 
     ExecutionContext::ExecutionContext(TempRow temp_row,
-                                       std::unordered_map<std::string, int> fullname2index) : fullname2index_(
-        std::move(fullname2index)), row(std::move(temp_row)) {
+                                       std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> fullname2index,
+                                       std::vector<TableFullName> v, std::string curDB,
+                                       rocksdb::DB *db) : fullname2index_(
+                                                              std::move(fullname2index)),
+                                                          row(std::move(temp_row)),
+                                                          full_names_(std::move(v)), curDB_(std::move(curDB)), db_(db) {
+    }
+
+    [[nodiscard]] std::string TableFullName::getTableMetaKey() const {
+        return Executor::MakeTableMetadataPrefix(table_schema, table_name);
     }
 }

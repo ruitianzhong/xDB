@@ -15,6 +15,28 @@
 #include "sql/stmts.h"
 
 namespace xDB {
+
+
+    struct TableFullName {
+        std::string table_name;
+        std::string table_schema;
+        TableMetadata metadata;
+
+        TableFullName(std::string table_schema, std::string table_name): table_name(std::move(table_name)),
+                                                                         table_schema(std::move(table_schema)) {
+        }
+
+        [[nodiscard]] std::string getTableMetaKey() const;
+
+        [[nodiscard]] std::string toString() const {
+            return table_schema + "." + table_name;
+        }
+
+        std::string toStringWithColumn(const std::string &column) const {
+            return toString() + "." + column;
+        }
+    };
+
     // forward declaration
     class TempRow {
     public:
@@ -29,27 +51,77 @@ namespace xDB {
         std::vector<Column> columns_;
     };
 
+
     class ExecutionContext {
     public:
-        ExecutionContext(TempRow temp_row, std::unordered_map<std::string, int> fullname2index);
+        ExecutionContext(TempRow temp_row, std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> fullname2index,
+                         std::vector<TableFullName> full_names, std::string curDB, rocksdb::DB *db);
 
-        std::unordered_map<std::string, int> fullname2index() { return fullname2index_; }
+        std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> fullname2index() const { return fullname2index_; }
 
         Column column(const int index) { return row.column(index); }
 
+        int table_size() const { return static_cast<int>(full_names_.size()); }
+
+        TableFullName tables(const int idx) { return full_names_[idx]; }
+
+        std::vector<TableFullName> tables() { return full_names_; }
+
+        std::string curDB() const { return curDB_; }
+
+        rocksdb::DB *getDB() const { return db_; }
+
     private:
-        std::unordered_map<std::string, int> fullname2index_;
+        std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> fullname2index_;
         TempRow row;
+        std::vector<TableFullName> full_names_;
+        std::string curDB_;
+        rocksdb::DB *db_;
     };
 
-    struct ColumnFullName {
-        std::string table_name, db_name, column_name;
+    class ExecutionContextBuilder {
+    public:
+        ExecutionContextBuilder();
 
-        ColumnFullName(std::string db_name, std::string table_name,
-                       std::string column_name);
+        ExecutionContextBuilder &add(TempRow row) {
+            row_ = std::move(row);
+            return *this;
+        }
 
-        [[nodiscard]] std::string toString() const;
+        ExecutionContextBuilder &add(std::vector<TableFullName> v) {
+            v_ = std::move(v);
+            return *this;
+        }
+
+        ExecutionContextBuilder &add(
+            const std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> &fullname2index) {
+            fullname2index_ = fullname2index;
+            return *this;
+        }
+
+        ExecutionContextBuilder &add(std::string curDB) {
+            curDB_ = std::move(curDB);
+            return *this;
+        }
+
+        ExecutionContextBuilder &add(rocksdb::DB *db) {
+            db_ = db;
+            return *this;
+        }
+
+
+        ExecutionContext build() const {
+            return {row_, fullname2index_, v_, curDB_, db_};
+        }
+
+    private:
+        TempRow row_;
+        std::vector<TableFullName> v_;
+        std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> fullname2index_;
+        std::string curDB_;
+        rocksdb::DB *db_;
     };
+
 
     class Executor {
     public:
@@ -108,7 +180,8 @@ namespace xDB {
         bool collectTableAllRows(std::vector<TempRow> &rows, const std::string &dbname,
                                  const std::string &tablename) const;
 
-        static bool buildColumnName2IndexMap(std::unordered_map<std::string, int> m, const TableMetadata &metadata);
+        static bool buildColumnName2IndexMap(std::unordered_map<std::string, int> m,
+                                             const TableMetadata &metadata);
 
         bool visitExp(Exp *exp, AbstractExpProcessor *processor);
 
