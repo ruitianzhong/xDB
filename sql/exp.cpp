@@ -52,7 +52,7 @@ namespace xDB {
                                                                   exp3(exp3_) {
     }
 
-    bool BetweenExpr::visit(AbstractExpProcessor* processor) {
+    bool BetweenExpr::visit(AbstractExpProcessor *processor) {
         return processor->process(this);
     }
 
@@ -61,14 +61,17 @@ namespace xDB {
 
     ScalarExp::ScalarExp(char *s): ScalarExp() {
         this->str = s;
+        this->type = ScalarChar;
     }
 
     ScalarExp::ScalarExp(double d_) : ScalarExp() {
         this->d = d_;
+        this->type = ScalarFloat;
     }
 
     ScalarExp::ScalarExp(int i_): ScalarExp() {
         integer = i_;
+        this->type = ScalarInteger;
     }
 
     ScalarType ScalarExp::scalarType() const {
@@ -77,9 +80,10 @@ namespace xDB {
 
     ScalarExp::ScalarExp(ColumnName *column_name_) : ScalarExp() {
         column_name = column_name_;
+        this->type = ScalarName;
     }
 
-    bool ScalarExp::visit(AbstractExpProcessor* processor) {
+    bool ScalarExp::visit(AbstractExpProcessor *processor) {
         return processor->process(this);
     }
 
@@ -104,6 +108,22 @@ namespace xDB {
 
     int Value::getInteger() const {
         return integer_num;
+    }
+
+    bool Value::ok() const{
+        switch (type_) {
+            case ScalarChar:
+                std::cout << "[ Warning ] " << "Unexpected CHAR value " << getChar() << std::endl;
+                return false;
+            case ScalarInteger:
+                return getInteger() != 0;
+            case ScalarNULL:
+                std::cout << "[ Warning ] NULL value" << std::endl;
+                return false;
+            default:
+                std::cout << "[Error] Unknown type" << std::endl;
+                return false;
+        }
     }
 
     ScalarType Value::getType() const {

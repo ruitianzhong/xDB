@@ -169,7 +169,7 @@ column_name
 }
 
 opt_where
-: WHERE expr { }
+: WHERE expr { $$ = $2;  }
 | { $$=nullptr; }
 
     /****** Expression ******/

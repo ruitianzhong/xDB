@@ -15,8 +15,6 @@
 #include "sql/stmts.h"
 
 namespace xDB {
-
-
     struct TableFullName {
         std::string table_name;
         std::string table_schema;
@@ -180,29 +178,24 @@ namespace xDB {
         bool collectTableAllRows(std::vector<TempRow> &rows, const std::string &dbname,
                                  const std::string &tablename) const;
 
-        static bool buildColumnName2IndexMap(std::unordered_map<std::string, int> m,
+        static bool buildColumnName2IndexMap(const std::string &db, const std::string &table,
+                                             std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> &m,
                                              const TableMetadata &metadata);
 
-        bool visitExp(Exp *exp, AbstractExpProcessor *processor);
+        bool visitExp(Exp *exp, AbstractExpProcessor *processor) const;
 
-        bool visitBetween(BetweenExpr *between_expr, AbstractExpProcessor *processor);
+        bool visitBetween(BetweenExpr *between_expr, AbstractExpProcessor *processor) const;
 
-        static bool visitScalar(ScalarExp *exp, AbstractExpProcessor *processor);
+        bool visitScalar(ScalarExp *exp, AbstractExpProcessor *processor) const;
 
-        bool visitBinary(BinaryExp *exp, AbstractExpProcessor *processor);
+        bool visitBinary(BinaryExp *exp, AbstractExpProcessor *processor) const;
 
-        bool visitUnary(UnaryExp *exp, AbstractExpProcessor *processor);
+        bool visitUnary(UnaryExp *exp, AbstractExpProcessor *processor) const;
 
 
         std::string currentDB;
         rocksdb::DB *db;
     };
-
-    class ExecutionResult {
-    public:
-        bool ok();
-    };
-
 
     class AbstractExpProcessor {
     public:
@@ -224,7 +217,8 @@ namespace xDB {
     private:
     };
 
-    class ExpChecker : public AbstractExpProcessor {
+    class ExpChecker final : public AbstractExpProcessor {
+    public:
         explicit ExpChecker(ExecutionContext context): AbstractExpProcessor(std::move(context)) {
         }
 
@@ -232,6 +226,7 @@ namespace xDB {
     };
 
     class ExpEvaluator : public AbstractExpProcessor {
+    public:
         explicit ExpEvaluator(ExecutionContext context): AbstractExpProcessor(std::move(context)) {
         }
 

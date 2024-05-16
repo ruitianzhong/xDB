@@ -17,8 +17,7 @@ namespace xDB {
         std::vector<TempRow> rows;
         collectTableAllRows(rows, cur, tablename);
         std::unordered_map<std::string, int> m;
-        buildColumnName2IndexMap(m, metadata);
-
+        // TODO fix buildColumnName2IndexMap(m, metadata);
         //check assign here
         for (auto assign: *update_stmt->update_assigns) {
             assert(assign!=nullptr&&assign->column_name!=nullptr&&assign->right!=nullptr);

@@ -89,6 +89,8 @@ namespace xDB {
 
         [[nodiscard]] int getInteger() const;
 
+        bool ok() const;
+
     private:
         ScalarType type_;
         std::string s_; // full column name

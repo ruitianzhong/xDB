@@ -135,15 +135,7 @@ namespace xDB {
         for (auto column_name: *select_stmt->column_names) {
             assert(column_name!=nullptr);
             assert(column_name->column_name!=nullptr);
-
-            if (column_name->schema == nullptr && currentDB.empty()) {
-                std::cout << "No database selected for `" << column_name->name << "`" << std::endl;
-                return;
-            }
-
-            std::string curDB = column_name->schema == nullptr ? currentDB : column_name->schema;
             std::string colname = column_name->column_name;
-            bool found = false;
 
             // handle wild card
             if (colname == "*") {
@@ -156,6 +148,15 @@ namespace xDB {
                 }
                 continue;
             }
+
+            if (column_name->schema == nullptr && currentDB.empty()) {
+                std::cout << "No database selected for `" << column_name->name << "`" << std::endl;
+                return;
+            }
+
+            std::string curDB = column_name->schema == nullptr ? currentDB : column_name->schema;
+            bool found = false;
+
 
             if (column_name->name == nullptr) {
                 for (auto &table: v) {
@@ -184,13 +185,20 @@ namespace xDB {
                 return;
             }
         }
+        // staitic check for the where expression (best-effort)
+        if (select_stmt->whereExp != nullptr) {
+            auto context = ExecutionContext(TempRow(), fullname2index, v, currentDB, db);
+            ExpChecker exp_checker(context);
+            if (!visitExp(select_stmt->whereExp, &exp_checker)) {
+                std::cout << "Please check the expression" << std::endl;
+                return;
+            }
+        }
         // build the intermediate row here
         TempRow row;
         std::vector<TempRow> results;
 
         MakeTempRow(v, 0, row, results, db);
-
-        std::cout << "result count: " << results.size() << std::endl;
 
         fort::table table;
         table << fort::header;
@@ -200,14 +208,48 @@ namespace xDB {
         }
         table << fort::endr;
 
-
+        int reuslt_cnt = 0;
         for (auto result: results) {
+            if (select_stmt->whereExp != nullptr) {
+                ExecutionContext context(result, fullname2index, v, currentDB, db);
+                ExpEvaluator evaluator(context);
+
+                bool ok = visitExp(select_stmt->whereExp, &evaluator);
+                if (!ok) {
+                    return;
+                }
+                ok = false;
+
+
+                Value value = select_stmt->whereExp->getValue();
+                switch (value.getType()) {
+                    case ScalarInteger:
+                        ok = value.getInteger() != 0;
+                        break;
+                    case ScalarChar:
+                        std::cout << "[ Warning ] Char result :" << value.getChar() << std::endl;
+                        break;
+
+                    case ScalarNULL:
+                        std::cout << "[ Warning ] NULL result" << std::endl;
+                        break;
+                    case ScalarInvalid:
+                    default:
+                        std::cout << "[Warning] unknown type" << std::endl;
+                }
+                select_stmt->whereExp->setValue(Value());
+
+                if (!ok) { continue; }
+            }
+
+            reuslt_cnt++;
             for (const auto &col: column_full_names) {
                 if (column2index.find(col.toString()) == column2index.end()) {
                     std::cout << "Can not find " << col.toString() << std::endl;
                     return;
                 }
                 int index = column2index[col.toString()];
+
                 Column column = result.column(index);
                 switch (column.type()) {
                     case Column::COLUMN_INT:
@@ -226,7 +268,10 @@ namespace xDB {
             }
             table << fort::endr;
         }
-
-        std::cout << table.to_string() << std::endl;
+        if (reuslt_cnt > 0) {
+            std::cout << table.to_string() << std::endl;
+        } else {
+            std::cout << "Empty set" << std::endl;
+        }
     }
 }

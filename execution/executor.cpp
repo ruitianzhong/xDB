@@ -12,11 +12,11 @@
 #include "sql/parser_result.h"
 
 namespace xDB {
-    Executor::Executor() = default;
-
+    Executor::Executor(): db(nullptr) {
+    }
 
     bool Executor::execute(ParserResult *results) {
-        for (auto &result: *results->getStatements()) {
+        for (const auto &result: *results->getStatements()) {
             if (!dispatch(result)) {
                 return false;
             }
@@ -65,10 +65,6 @@ namespace xDB {
         const auto s = db->WaitForCompact(opt);
         assert(s.ok());
         delete db;
-    }
-
-    bool ExecutionResult::ok() {
-        return true;
     }
 
     bool Executor::init() {
@@ -164,9 +160,12 @@ namespace xDB {
     }
 
     // const reference?
-    bool Executor::buildColumnName2IndexMap(std::unordered_map<std::string, int> m, const TableMetadata &metadata) {
+    bool Executor::buildColumnName2IndexMap(const std::string &db, const std::string &table,
+                                            std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> &m,
+                                            const TableMetadata &metadata) {
         for (int i = 0; i < metadata.definitions_size(); i++) {
-            m[metadata.definitions(i).name()] = i;
+            ColumnFullName c(db, table, metadata.definitions(i).name());
+            m[c] = i;
         }
         return true;
     }

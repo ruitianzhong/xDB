@@ -10,7 +10,9 @@ cmake_minimum_required(VERSION 3.15)
 
 project(xDB
         LANGUAGES C CXX
-        DESCRIPTION "A DBMS")
+        DESCRIPTION "xDB is a DBMS built on RocksDB"
+        VERSION 0.0.1
+)
 
 add_executable(${PROJECT_NAME} main.cpp
         sql_lexer.cpp
@@ -63,6 +65,7 @@ add_executable(${PROJECT_NAME} main.cpp
         execution/processor/scalar_evaluator.cpp
         execution/processor/visit_exp.cpp
         execution/processor/exp_checker.cpp
+        include/version.h
 )
 
 add_custom_command(

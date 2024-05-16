@@ -16,10 +16,46 @@ namespace xDB {
         if (!checkTable(delete_stmt->table_name, cur, table, metadata)) {
             return;
         }
+        // check expression
+        std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> m;
+
+        std::vector<TableFullName> v;
+        TableFullName table_full_name(cur, table);
+        v.push_back(table_full_name);
+
+        buildColumnName2IndexMap(cur, table, m, metadata);
+        if (delete_stmt->whereExp != nullptr) {
+            auto context = ExecutionContext(TempRow(), m, v, cur, db);
+            auto expChecker = ExpChecker(context);
+
+            if (!visitExp(delete_stmt->whereExp, &expChecker)) {
+                std::cout << "[ Warning ] " << "static check fails on where expression" << std::endl;
+                return;
+            }
+        }
 
         std::vector<TempRow> rows;
         collectTableAllRows(rows, cur, table);
-        std::unordered_map<std::string, int> m;
-        buildColumnName2IndexMap(m, metadata);
+        int delete_cnt = 0;
+
+        for (auto result: rows) {
+            if (delete_stmt->whereExp != nullptr) {
+                ExecutionContext context(result, m, v, cur, db);
+                ExpEvaluator evaluator(context);
+                bool ok = visitExp(delete_stmt->whereExp, &evaluator);
+                if (!ok) {
+                    std::cout << "[ Warning ] Delete where expression" << std::endl;
+                    continue;
+                }
+                Value v = delete_stmt->whereExp->getValue();
+                // reset
+                delete_stmt->whereExp->setValue(Value());
+
+                if (!v.ok()) {
+                    continue;
+                }
+            }
+            // TODO delete rows when expression is true
+        }
     }
 }
