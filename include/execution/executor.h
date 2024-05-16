@@ -45,6 +45,8 @@ namespace xDB {
 
         void addColumns(const Row &row);
 
+        void setColumn(const int idx, const Column &column) { columns_[idx] = column; }
+
     private:
         std::vector<Column> columns_;
     };
@@ -175,11 +177,12 @@ namespace xDB {
 
         bool checkTable(TableName table_name, std::string &cur, std::string &table, TableMetadata &metadata) const;
 
-        bool collectTableAllRows(std::vector<TempRow> &rows, const std::string &dbname,
+        bool collectTableAllRows(std::vector<std::pair<TempRow, std::string> > &rows, const std::string &dbname,
                                  const std::string &tablename) const;
 
         static bool buildColumnName2IndexMap(const std::string &db, const std::string &table,
-                                             std::unordered_map<ColumnFullName, int, ColumnFullNameHasher> &m,
+                                             std::unordered_map<ColumnFullName, int,
+                                                 ColumnFullNameHasher> &m,
                                              const TableMetadata &metadata);
 
         bool visitExp(Exp *exp, AbstractExpProcessor *processor) const;

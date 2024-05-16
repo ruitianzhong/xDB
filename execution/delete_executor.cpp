@@ -34,28 +34,41 @@ namespace xDB {
             }
         }
 
-        std::vector<TempRow> rows;
+        std::vector<std::pair<TempRow, std::string> > rows;
         collectTableAllRows(rows, cur, table);
-        int delete_cnt = 0;
-
-        for (auto result: rows) {
+        std::vector<std::pair<TempRow, std::string> > delete_list;
+        for (const auto &result: rows) {
             if (delete_stmt->whereExp != nullptr) {
-                ExecutionContext context(result, m, v, cur, db);
+                ExecutionContext context(result.first, m, v, cur, db);
                 ExpEvaluator evaluator(context);
-                bool ok = visitExp(delete_stmt->whereExp, &evaluator);
-                if (!ok) {
+
+                if (!visitExp(delete_stmt->whereExp, &evaluator)) {
                     std::cout << "[ Warning ] Delete where expression" << std::endl;
                     continue;
                 }
-                Value v = delete_stmt->whereExp->getValue();
+                Value value = delete_stmt->whereExp->getValue();
                 // reset
                 delete_stmt->whereExp->setValue(Value());
 
-                if (!v.ok()) {
+                if (!value.ok()) {
                     continue;
                 }
             }
-            // TODO delete rows when expression is true
+            delete_list.push_back(result);
         }
+
+        if (delete_list.empty()) {
+            std::cout << "Empty set" << std::endl;
+            return;
+        }
+
+        for (const auto &pair: delete_list) {
+            auto status = db->Delete(rocksdb::WriteOptions(), pair.second);
+            if (!status.ok()) {
+                std::cout << "[ Warn ] " << status.ToString() << std::endl;
+            }
+        }
+
+        std::cout << delete_list.size() << " rows affected" << std::endl;
     }
 }

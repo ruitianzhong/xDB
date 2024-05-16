@@ -20,7 +20,7 @@ void read_loop();
 const auto welcome = "Welcome to the xDB. xDB is a DBMS built on RocksDB.";
 const auto copyright = "Copyright (c) 2024-present Ruitian Zhong All rights reserved.";
 const auto author = "Written by Ruitian Zhong <https://github.com/ruitianzhong>.";
-const auto license = "License: MIT; Source code repository: <https://github.com/ruitianzhong/xDB>.";
+const auto license = "Source code git repository: <https://github.com/ruitianzhong/xDB>.";
 
 void printInfo() {
     std::cout << welcome << std::endl;

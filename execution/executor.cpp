@@ -70,17 +70,9 @@ namespace xDB {
     bool Executor::init() {
         rocksdb::Options options;
         options.create_if_missing = true;
-        rocksdb::Status status = rocksdb::DB::Open(options, "/tmp/testdb", &db);
+        const rocksdb::Status status = rocksdb::DB::Open(options, "/tmp/testdb", &db);
         assert(status.ok());
         return true;
-        // if (status.ok()) status = db->Put(rocksdb::WriteOptions(), "1", "1");
-        // std::string value;
-        // if (status.ok()) status = db->Get(rocksdb::ReadOptions(), "2", &value);
-        // std::cout << status.ok();
-        // assert(status.ok());
-
-        // status = db->Delete(rocksdb::WriteOptions(), "1");
-        // assert(status.ok());
     }
 
     Column TempRow::column(int index) {
@@ -129,7 +121,7 @@ namespace xDB {
         return true;
     }
 
-    bool Executor::collectTableAllRows(std::vector<TempRow> &rows, const std::string &dbname,
+    bool Executor::collectTableAllRows(std::vector<std::pair<TempRow, std::string> > &rows, const std::string &dbname,
                                        const std::string &tablename) const {
         const std::string rowPrefix = TABLE_ROW_PREFIX + dbname + tablename;
 
@@ -141,14 +133,14 @@ namespace xDB {
             }
             TempRow temp_row;
             Row row;
-            if (!row.ParseFromString(it->value().data())) {
+            if (!row.ParseFromString(it->value().ToString())) {
                 std::cout << "[ Codec error ]" << std::endl;
                 delete it;
                 return false;
             }
             temp_row.addColumns(row);
-
-            rows.push_back(temp_row);
+            auto p = std::pair(temp_row, it->key().ToString());
+            rows.push_back(p);
         }
 
         if (!it->status().ok()) {

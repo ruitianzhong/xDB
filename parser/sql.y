@@ -123,10 +123,10 @@ statements
 statement
 : create_statement { $$ = $1 ;}
 | insert_statement { $$ =$1;}
-| drop_statement { printf("drop stmt\n"); $$ = $1;}
+| drop_statement {  $$ = $1;}
 | show_statement { $$ = $1;}
 | use_statement {  $$ = $1;}
-| update_statement { printf("update_statement\n"); $$ = $1;}
+| update_statement { $$ = $1;}
 | select_statement {  $$ = $1;}
 | delete_statement { $$ = $1; }
 | EXIT ';' { $$ = new ExitStmt(); }
