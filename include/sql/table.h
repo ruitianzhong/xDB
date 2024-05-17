@@ -28,6 +28,7 @@ namespace xDB {
         INTEGER,
         FLOAT,
         CHAR,
+        DataTypeNULL
     };
 
     class DataDefinition {

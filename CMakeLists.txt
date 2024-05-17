@@ -49,7 +49,6 @@ add_executable(${PROJECT_NAME} main.cpp
         common/codec/db.pb.h
         include/execution/executor.h
         execution/executor.cpp
-        execution/execution_result.cpp
         execution/create_executor.cpp
         include/constant.h
         execution/use_executor.cpp

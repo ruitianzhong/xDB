@@ -34,13 +34,15 @@ namespace xDB {
 
         explicit Parameter(char *str_);
 
-        double getDouble() const;
+        explicit Parameter();
 
-        int getInt() const;
+        [[nodiscard]] double getDouble() const;
 
-        char *getChar() const;
+        [[nodiscard]] int getInt() const;
 
-        DataType getType() const;
+        [[nodiscard]] char *getChar() const;
+
+        [[nodiscard]] DataType getType() const;
 
         virtual ~Parameter();
 

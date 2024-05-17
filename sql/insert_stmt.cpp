@@ -5,6 +5,10 @@
 // Copyright (c) 2024 ruitianzhong All rights reserved.
 //
 namespace xDB {
+    Parameter::Parameter() : str(nullptr), x(0), d(0), type(DataTypeNULL) {
+    }
+
+
     DataType Parameter::getType() const {
         return type;
     }

@@ -124,7 +124,7 @@ EXIT TOKEN(EXIT)
 \' { BEGIN(single_quoted_string); strbuf.clear();strbuf.str(""); }
 <single_quoted_string>\'\' { strbuf<<'\''; }
 <single_quoted_string>[^']* { strbuf<<yytext;}
-<single_quoted_string>\' { BEGIN(INITIAL); printf("%s\n",strbuf.str().c_str());yylval.str= strdup(strbuf.str().c_str()); return SQL_STRING; }
+<single_quoted_string>\' { BEGIN(INITIAL); yylval.str= strdup(strbuf.str().c_str()); return SQL_STRING; }
 
 <single_quoted_string><<EOF>> { fprintf(stderr,"[SQL-Lexer-Error] Unterminated string\n"); return 0;}
 

@@ -51,6 +51,9 @@ void read_loop() {
     while (true) {
         std::cout << "xDB> ";
         std::getline(std::cin, s);
+        if (s.empty()) {
+            continue;
+        }
         const auto result = new xDB::ParserResult();
         wrapped_parse(s.c_str(), result);
         if (!executor.execute(result)) {

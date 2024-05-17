@@ -353,6 +353,10 @@ insert_value
 | STRING {
     $$ = new Parameter($1);
 }
+| NULL {
+    printf("NULL\n");
+    $$ = new Parameter();
+}
 
 
  /****** DROP statement (example: DROP TABLE students;) ******/
@@ -475,7 +479,7 @@ int wrapped_parse(const char*text, ParserResult * result){
 
     yy_delete_buffer(state,scanner);
     yylex_destroy(scanner);
-    return 1;
+    return ret;
 }
 
 int yyerror(yyscan_t scanner,ParserResult * result ,const char *msg) {
