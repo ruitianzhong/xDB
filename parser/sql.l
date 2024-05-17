@@ -12,12 +12,7 @@
 
 #define TOKEN(name) { return SQL_##name; }
 
-int chars = 0;
-int words = 0;
 const char * lexer_str = nullptr;
-unsigned long slen = 0;
-unsigned long cur = 0;
-
 
 static thread_local std::stringstream strbuf;
 

@@ -85,6 +85,7 @@ add_custom_command(
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/common/codec)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/third_party/linenoise)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/rocksdb/include)
 add_custom_target(check
@@ -118,6 +119,8 @@ add_subdirectory(third_party/googletest)
 target_link_directories(xDB PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/third_party/rocksdb)
 
 target_link_libraries(xDB PRIVATE rocksdb)
+
+target_link_libraries(xDB PRIVATE xDB_linenoise)
 
 find_library(LZ4_LIB lz4 REQUIRED)
 message(STATUS "finding ${LZ4_LIB}")
@@ -163,6 +166,7 @@ message(STATUS "finding program make")
 find_library(PROTOBUF protobuf REQUIRED)
 message(STATUS "finding ${PROTOBUF}")
 
+add_subdirectory(third_party/linenoise)
 
 
 

@@ -10,10 +10,10 @@
 #include <csignal>
 #include "common/codec/db.pb.h"
 #include "execution/executor.h"
+#include "linenoise.h"
 
 int wrapped_parse(const char *text, xDB::ParserResult *result);
 
-std::string s;
 
 void read_loop();
 
@@ -46,16 +46,40 @@ void setup_signal() {
 
 void read_loop() {
     xDB::Executor executor;
-
+    std::string pending_query;
     executor.init();
+    int count = 0;
+    bool firstline = true;
     while (true) {
-        std::cout << "xDB> ";
-        std::getline(std::cin, s);
-        if (s.empty()) {
+        auto prompt = firstline ? "xDB> " : "   -> ";
+        char *query_c_str = linenoise(prompt);
+        if (query_c_str == nullptr) break;
+        std::string q = query_c_str;
+        linenoiseFree(query_c_str);
+
+        std::string final_query;
+
+        for (unsigned int i = 0; i < q.length(); i++) {
+            pending_query.append(std::string(1, q[i]));
+            if (q[i] == ';' && count % 2 == 0) {
+                final_query += pending_query;
+                pending_query.clear();
+            }
+            if (q[i] == '\'') {
+                count++;
+            }
+        }
+        if (!pending_query.empty()) {
+            firstline = false;
+        } else {
+            firstline = true;
+        }
+        pending_query.append(" ");
+        if (final_query.empty()) {
             continue;
         }
         const auto result = new xDB::ParserResult();
-        wrapped_parse(s.c_str(), result);
+        wrapped_parse(final_query.c_str(), result);
         if (!executor.execute(result)) {
             break;
         }

@@ -354,7 +354,6 @@ insert_value
     $$ = new Parameter($1);
 }
 | NULL {
-    printf("NULL\n");
     $$ = new Parameter();
 }
 
