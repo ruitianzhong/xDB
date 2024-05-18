@@ -31,6 +31,7 @@ message Row {
 message TableMetadata {
   repeated DBDefinition definitions = 1;
   optional uint64 nextId = 2;
+  optional bool hasPrimary = 3;
 }
 
 message DBDefinition{
@@ -44,6 +45,7 @@ message DBDefinition{
   optional bool isPrimary = 3;
   optional bool isIndex = 4;
   optional uint64 charLen = 5;
+  optional bool nullable = 6;
 }
 
 message DBMetadata {

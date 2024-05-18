@@ -8,7 +8,7 @@
 //
 namespace xDB {
     bool ExpEvaluator::processNegate(UnaryExp *exp) {
-        if (exp->getValue().getType() != ScalarInteger) {
+        if (exp->getExp()->getValue().getType() != ScalarInteger) {
             std::cout << "incompatible type for negation " << std::endl;
             return false;
         }
@@ -19,7 +19,7 @@ namespace xDB {
     }
 
     bool ExpEvaluator::processNot(UnaryExp *exp) {
-        if (exp->getValue().getType() != ScalarInteger) {
+        if (exp->getExp()->getValue().getType() != ScalarInteger) {
             std::cout << "incompatible type for NOT" << std::endl;
             return false;
         }
@@ -36,7 +36,7 @@ namespace xDB {
 
     bool ExpEvaluator::processIsNull(UnaryExp *exp) {
         Value v;
-        if (exp->getValue().getType() != ScalarNULL) {
+        if (exp->getExp()->getValue().getType() != ScalarNULL) {
             v = Value(0);
         } else {
             v = Value(1);
@@ -47,7 +47,7 @@ namespace xDB {
 
     bool ExpEvaluator::processIsNotNull(UnaryExp *exp) {
         Value v;
-        if (exp->getValue().getType() != ScalarNULL) {
+        if (exp->getExp()->getValue().getType() != ScalarNULL) {
             v = Value(1);
         } else {
             v = Value(0);

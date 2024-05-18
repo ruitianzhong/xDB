@@ -32,6 +32,7 @@ using namespace xDB;
 %token<str> IDENTIFIER STRING
 %token EXIT DATABASES
 %token<int_val> INTVAL
+%token UNIQUE PRIMARY KEY
 
 %type<use_stmt> use_statement
 %type<select_stmt> select_statement
@@ -56,6 +57,8 @@ using namespace xDB;
 %type<column_name_list> column_list opt_column_list select_comma_list_with_star select_comma_list
 %type<insert_values_list> insert_values
 %type<all_params_list> insert_values_list
+%type<column_constraints> opt_column_constraints constraint_set
+%type<constraint> constraint
 
 %left OR
 %left AND
@@ -104,6 +107,8 @@ using namespace xDB;
     std::vector<UpdateAssign*> * update_assign_list;
     UpdateStmt * update_stmt;
     std::vector<std::vector<Parameter*>*>* all_params_list;
+    ColumnConstraintType constraint;
+    std::vector<ColumnConstraintType> *column_constraints;
 }
 
 
@@ -293,6 +298,23 @@ create_statement
     $$ = new CreateStmt($3);
 }
 
+opt_column_constraints
+: { $$ = nullptr; }
+| constraint_set{ $$= $1;}
+
+constraint_set: constraint {
+    $$ = new std::vector<ColumnConstraintType>();
+    $$->push_back($1);
+}
+| constraint_set  constraint {
+    $$ = $1;
+    $$->push_back($2);
+}
+
+constraint
+: PRIMARY KEY { $$ = ConstraintPrimaryKey;}
+| UNIQUE {}
+| NOT NULL { $$ = ConstraintNotNull; }
 
 fields_definition
 : fields_definition ',' field_type {
@@ -304,9 +326,10 @@ fields_definition
     $$->push_back($1);
 }
 
-field_type: IDENTIFIER type {
+field_type: IDENTIFIER type opt_column_constraints {
     $$ = $2;
     $$->setName($1);
+    $$->setColumnConstraints($3);
 }
 
 
@@ -347,8 +370,14 @@ insert_value
 : INTVAL {
     $$ = new Parameter($1);
 }
+| '-' INTVAL {
+    $$ = new Parameter(-$2);
+}
 | FLOATVAL {
     $$ = new Parameter($1);
+}
+| '-' FLOATVAL {
+    $$ =  new Parameter(-$2);
 }
 | STRING {
     $$ = new Parameter($1);

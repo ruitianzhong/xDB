@@ -95,6 +95,7 @@ threads of control.(19 Reentrant C Scanners
 )
 
 We also need to configure it in bison:
+
 ```bison
 %lex-param   { yyscan_t scanner }
 ```
@@ -272,3 +273,7 @@ int main()
 ```
 
 We should use public inheritance here.
+
+### Token Precedence and Associativity
+
+[Useful article ](https://cloud.tencent.com/developer/article/2190364)

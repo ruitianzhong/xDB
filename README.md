@@ -2,7 +2,6 @@
 
 A DBMS implemented for Xidian University‘s compiler course
 
-
 ## Build
 
 ### Ubuntu 22.04
@@ -15,6 +14,7 @@ git submodule update
 ```
 
 Install the following libraries on your computer
+
 ```shell
 # required by rocksdb
 sudo apt-get install libgflags-dev libzstd-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev
@@ -36,13 +36,12 @@ DELETE FROM user WHERE id=42;
 DROP TABLE user;
 ```
 
-More details:
+More details in [test.sql](./test/test.sql):
 
 ```sql
 use test;
 select * from test.table1,table1;-- duplicated table (It is correctly checked)
 ```
-
 
 ## Build
 
@@ -50,7 +49,7 @@ select * from test.table1,table1;-- duplicated table (It is correctly checked)
 mkdir build
 cd build
 cmake ..
-make
+make -j4
 ```
 
 ## Project Structure
@@ -66,7 +65,16 @@ make
 | third_party/*        | third party dependencies, e.g., googletest, rocksdb |
 | test/*               | unit test                                           |
 | docs/*               | documentation for the project                       |
- 
+
+## Run
+
+Start xDB interactive shell (interactive mode) 
+
+```shell
+# Assuming you are in build directory
+./xDB
+```
+
 ## Resources
 
 + [sqllogictest](https://www.sqlite.org/sqllogictest/doc/trunk/about.wiki)

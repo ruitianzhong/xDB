@@ -5,6 +5,7 @@
 
 #ifndef TABLE_H
 #define TABLE_H
+#include <vector>
 
 namespace xDB {
     struct TableName {
@@ -31,6 +32,11 @@ namespace xDB {
         DataTypeNULL
     };
 
+    enum ColumnConstraintType {
+        ConstraintPrimaryKey,
+        ConstraintNotNull,
+    };
+
     class DataDefinition {
     public:
         explicit DataDefinition(DataType type_);
@@ -39,9 +45,11 @@ namespace xDB {
 
         void setName(char *data_name);
 
+        void setColumnConstraints(std::vector<ColumnConstraintType> *constraints);
 
         DataType type;
         char *data_name;
+        std::vector<ColumnConstraintType> *constraints;
     };
 
     class CharDefinition final : public DataDefinition {
@@ -50,7 +58,7 @@ namespace xDB {
 
         ~CharDefinition() override;
 
-        int getLen() const;
+        [[nodiscard]] int getLen() const;
 
     private:
         int len;
