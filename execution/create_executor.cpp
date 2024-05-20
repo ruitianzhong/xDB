@@ -29,6 +29,7 @@ namespace xDB {
     bool setUpMetaData(TableMetadata *metadata, const CreateStmt *stmt) {
         assert(stmt->list!=nullptr);
         std::unordered_set<std::string> s;
+        bool hasPrimaryKey = false;
 
         for (const auto &def: *stmt->list) {
             assert(def->data_name!=nullptr);
@@ -40,6 +41,29 @@ namespace xDB {
             s.insert(def->data_name);
 
             DBDefinition *dbd = metadata->add_definitions();
+            dbd->set_nullable(true);
+            if (def->constraints != nullptr) {
+                // check constraint
+                for (const auto constraint: *def->constraints) {
+                    switch (constraint) {
+                        case ConstraintNotNull:
+                            dbd->set_nullable(false);
+                            break;
+                        case ConstraintPrimaryKey:
+                            if (hasPrimaryKey) {
+                                std::cout << "duplicate primary key" << std::endl;
+                                return false;
+                            }
+                            dbd->set_nullable(false);
+                            dbd->set_isprimary(true);
+                            break;
+                    }
+                }
+                if (dbd->isprimary()) {
+                    hasPrimaryKey = true;
+                }
+            }
+
             CharDefinition *cd;
             dbd->set_name(def->data_name);
             switch (def->type) {
@@ -90,8 +114,7 @@ namespace xDB {
             s = db->Put(rocksdb::WriteOptions(), key, value);
             assert(s.ok());
             std::cout << "`" << cur << "." << stmt->name.name << "` created" << std::endl;
-        }
-        if (!s.ok()) {
+        } else if (!s.ok() && !s.IsNotFound()) {
             std::cout << "Unexpected error: " << s.ToString() << std::endl;
         }
     }

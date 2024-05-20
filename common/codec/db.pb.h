@@ -885,6 +885,7 @@ class TableMetadata PROTOBUF_FINAL :
   enum : int {
     kDefinitionsFieldNumber = 1,
     kNextIdFieldNumber = 2,
+    kHasPrimaryFieldNumber = 3,
   };
   // repeated .xDB.DBDefinition definitions = 1;
   int definitions_size() const;
@@ -917,6 +918,19 @@ class TableMetadata PROTOBUF_FINAL :
   void _internal_set_nextid(::PROTOBUF_NAMESPACE_ID::uint64 value);
   public:
 
+  // optional bool hasPrimary = 3;
+  bool has_hasprimary() const;
+  private:
+  bool _internal_has_hasprimary() const;
+  public:
+  void clear_hasprimary();
+  bool hasprimary() const;
+  void set_hasprimary(bool value);
+  private:
+  bool _internal_hasprimary() const;
+  void _internal_set_hasprimary(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:xDB.TableMetadata)
  private:
   class _Internal;
@@ -928,6 +942,7 @@ class TableMetadata PROTOBUF_FINAL :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::xDB::DBDefinition > definitions_;
   ::PROTOBUF_NAMESPACE_ID::uint64 nextid_;
+  bool hasprimary_;
   friend struct ::TableStruct_db_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1088,6 +1103,7 @@ class DBDefinition PROTOBUF_FINAL :
     kCharLenFieldNumber = 5,
     kIsPrimaryFieldNumber = 3,
     kIsIndexFieldNumber = 4,
+    kNullableFieldNumber = 6,
     kTypeFieldNumber = 1,
   };
   // optional string name = 2;
@@ -1119,17 +1135,17 @@ class DBDefinition PROTOBUF_FINAL :
   std::string* _internal_mutable_name();
   public:
 
-  // optional int64 charLen = 5;
+  // optional uint64 charLen = 5;
   bool has_charlen() const;
   private:
   bool _internal_has_charlen() const;
   public:
   void clear_charlen();
-  ::PROTOBUF_NAMESPACE_ID::int64 charlen() const;
-  void set_charlen(::PROTOBUF_NAMESPACE_ID::int64 value);
+  ::PROTOBUF_NAMESPACE_ID::uint64 charlen() const;
+  void set_charlen(::PROTOBUF_NAMESPACE_ID::uint64 value);
   private:
-  ::PROTOBUF_NAMESPACE_ID::int64 _internal_charlen() const;
-  void _internal_set_charlen(::PROTOBUF_NAMESPACE_ID::int64 value);
+  ::PROTOBUF_NAMESPACE_ID::uint64 _internal_charlen() const;
+  void _internal_set_charlen(::PROTOBUF_NAMESPACE_ID::uint64 value);
   public:
 
   // optional bool isPrimary = 3;
@@ -1158,6 +1174,19 @@ class DBDefinition PROTOBUF_FINAL :
   void _internal_set_isindex(bool value);
   public:
 
+  // optional bool nullable = 6;
+  bool has_nullable() const;
+  private:
+  bool _internal_has_nullable() const;
+  public:
+  void clear_nullable();
+  bool nullable() const;
+  void set_nullable(bool value);
+  private:
+  bool _internal_nullable() const;
+  void _internal_set_nullable(bool value);
+  public:
+
   // optional .xDB.DBDefinition.DefinitionType type = 1;
   bool has_type() const;
   private:
@@ -1181,9 +1210,10 @@ class DBDefinition PROTOBUF_FINAL :
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
-  ::PROTOBUF_NAMESPACE_ID::int64 charlen_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 charlen_;
   bool isprimary_;
   bool isindex_;
+  bool nullable_;
   int type_;
   friend struct ::TableStruct_db_2eproto;
 };
@@ -1774,13 +1804,41 @@ inline void TableMetadata::set_nextid(::PROTOBUF_NAMESPACE_ID::uint64 value) {
   // @@protoc_insertion_point(field_set:xDB.TableMetadata.nextId)
 }
 
+// optional bool hasPrimary = 3;
+inline bool TableMetadata::_internal_has_hasprimary() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool TableMetadata::has_hasprimary() const {
+  return _internal_has_hasprimary();
+}
+inline void TableMetadata::clear_hasprimary() {
+  hasprimary_ = false;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline bool TableMetadata::_internal_hasprimary() const {
+  return hasprimary_;
+}
+inline bool TableMetadata::hasprimary() const {
+  // @@protoc_insertion_point(field_get:xDB.TableMetadata.hasPrimary)
+  return _internal_hasprimary();
+}
+inline void TableMetadata::_internal_set_hasprimary(bool value) {
+  _has_bits_[0] |= 0x00000002u;
+  hasprimary_ = value;
+}
+inline void TableMetadata::set_hasprimary(bool value) {
+  _internal_set_hasprimary(value);
+  // @@protoc_insertion_point(field_set:xDB.TableMetadata.hasPrimary)
+}
+
 // -------------------------------------------------------------------
 
 // DBDefinition
 
 // optional .xDB.DBDefinition.DefinitionType type = 1;
 inline bool DBDefinition::_internal_has_type() const {
-  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  bool value = (_has_bits_[0] & 0x00000020u) != 0;
   return value;
 }
 inline bool DBDefinition::has_type() const {
@@ -1788,7 +1846,7 @@ inline bool DBDefinition::has_type() const {
 }
 inline void DBDefinition::clear_type() {
   type_ = 1;
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline ::xDB::DBDefinition_DefinitionType DBDefinition::_internal_type() const {
   return static_cast< ::xDB::DBDefinition_DefinitionType >(type_);
@@ -1799,7 +1857,7 @@ inline ::xDB::DBDefinition_DefinitionType DBDefinition::type() const {
 }
 inline void DBDefinition::_internal_set_type(::xDB::DBDefinition_DefinitionType value) {
   assert(::xDB::DBDefinition_DefinitionType_IsValid(value));
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
   type_ = value;
 }
 inline void DBDefinition::set_type(::xDB::DBDefinition_DefinitionType value) {
@@ -1956,7 +2014,7 @@ inline void DBDefinition::set_isindex(bool value) {
   // @@protoc_insertion_point(field_set:xDB.DBDefinition.isIndex)
 }
 
-// optional int64 charLen = 5;
+// optional uint64 charLen = 5;
 inline bool DBDefinition::_internal_has_charlen() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   return value;
@@ -1965,23 +2023,51 @@ inline bool DBDefinition::has_charlen() const {
   return _internal_has_charlen();
 }
 inline void DBDefinition::clear_charlen() {
-  charlen_ = PROTOBUF_LONGLONG(0);
+  charlen_ = PROTOBUF_ULONGLONG(0);
   _has_bits_[0] &= ~0x00000002u;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int64 DBDefinition::_internal_charlen() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint64 DBDefinition::_internal_charlen() const {
   return charlen_;
 }
-inline ::PROTOBUF_NAMESPACE_ID::int64 DBDefinition::charlen() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint64 DBDefinition::charlen() const {
   // @@protoc_insertion_point(field_get:xDB.DBDefinition.charLen)
   return _internal_charlen();
 }
-inline void DBDefinition::_internal_set_charlen(::PROTOBUF_NAMESPACE_ID::int64 value) {
+inline void DBDefinition::_internal_set_charlen(::PROTOBUF_NAMESPACE_ID::uint64 value) {
   _has_bits_[0] |= 0x00000002u;
   charlen_ = value;
 }
-inline void DBDefinition::set_charlen(::PROTOBUF_NAMESPACE_ID::int64 value) {
+inline void DBDefinition::set_charlen(::PROTOBUF_NAMESPACE_ID::uint64 value) {
   _internal_set_charlen(value);
   // @@protoc_insertion_point(field_set:xDB.DBDefinition.charLen)
+}
+
+// optional bool nullable = 6;
+inline bool DBDefinition::_internal_has_nullable() const {
+  bool value = (_has_bits_[0] & 0x00000010u) != 0;
+  return value;
+}
+inline bool DBDefinition::has_nullable() const {
+  return _internal_has_nullable();
+}
+inline void DBDefinition::clear_nullable() {
+  nullable_ = false;
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline bool DBDefinition::_internal_nullable() const {
+  return nullable_;
+}
+inline bool DBDefinition::nullable() const {
+  // @@protoc_insertion_point(field_get:xDB.DBDefinition.nullable)
+  return _internal_nullable();
+}
+inline void DBDefinition::_internal_set_nullable(bool value) {
+  _has_bits_[0] |= 0x00000010u;
+  nullable_ = value;
+}
+inline void DBDefinition::set_nullable(bool value) {
+  _internal_set_nullable(value);
+  // @@protoc_insertion_point(field_set:xDB.DBDefinition.nullable)
 }
 
 // -------------------------------------------------------------------

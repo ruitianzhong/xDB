@@ -67,6 +67,13 @@ select * from t2;
 
 drop table t1;
 
+-- column constraint ( the comment can be filtered)
+create table t5 (id int not null);
+insert into t5 values (1),(2);
+-- column id can not be null
+insert into t5 values (NULL);
+
+
 -- show
 show databases;
 show tables;

@@ -42,7 +42,6 @@ namespace xDB {
             auto sid = std::to_string(nextid);
 
             std::string key = TABLE_ROW_PREFIX.append(cur).append(insert_stmt->table_name.name).append(sid);
-
             if (!row.SerializeToString(&value)) {
                 std::cout << "Codec error" << std::endl;
                 return;
@@ -62,7 +61,7 @@ namespace xDB {
         }
     }
 
-    static bool checkAndMakeRow(const DBDefinition &def, Parameter *parameter, Row &row) {
+    static bool checkAndMakeRow(const DBDefinition &def, const Parameter *parameter, Row &row) {
         Column *column;
 
         assert(parameter!=nullptr);
@@ -81,6 +80,10 @@ namespace xDB {
             column->set_type(Column::COLUMN_CHAR);
             column->set_str(str);
         } else if (parameter->getType() == DataTypeNULL) {
+            if (!def.nullable()) {
+                std::cout << "column " << def.name() << " can not be null" << std::endl;
+                return false;
+            }
             column = row.add_columns();
             column->set_type(Column::COLUMN_NULL);
         } else {
@@ -146,7 +149,7 @@ namespace xDB {
                 Column *column = row.add_columns();
                 column->set_type(Column::COLUMN_NULL);
             } else {
-                if (auto parameter = checkMap[def.name()]; !checkAndMakeRow(def, parameter, row)) {
+                if (const auto parameter = checkMap[def.name()]; !checkAndMakeRow(def, parameter, row)) {
                     return false;
                 }
             }

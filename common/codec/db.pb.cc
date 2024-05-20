@@ -168,8 +168,10 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_db_2eproto::offsets[] PROTOBUF
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::xDB::TableMetadata, definitions_),
   PROTOBUF_FIELD_OFFSET(::xDB::TableMetadata, nextid_),
+  PROTOBUF_FIELD_OFFSET(::xDB::TableMetadata, hasprimary_),
   ~0u,
   0,
+  1,
   PROTOBUF_FIELD_OFFSET(::xDB::DBDefinition, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::xDB::DBDefinition, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -180,11 +182,13 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_db_2eproto::offsets[] PROTOBUF
   PROTOBUF_FIELD_OFFSET(::xDB::DBDefinition, isprimary_),
   PROTOBUF_FIELD_OFFSET(::xDB::DBDefinition, isindex_),
   PROTOBUF_FIELD_OFFSET(::xDB::DBDefinition, charlen_),
-  4,
+  PROTOBUF_FIELD_OFFSET(::xDB::DBDefinition, nullable_),
+  5,
   0,
   2,
   3,
   1,
+  4,
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::xDB::DBMetadata, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -196,9 +200,9 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 0, 7, sizeof(::xDB::Person)},
   { 9, 18, sizeof(::xDB::Column)},
   { 22, -1, sizeof(::xDB::Row)},
-  { 28, 35, sizeof(::xDB::TableMetadata)},
-  { 37, 47, sizeof(::xDB::DBDefinition)},
-  { 52, -1, sizeof(::xDB::DBMetadata)},
+  { 28, 36, sizeof(::xDB::TableMetadata)},
+  { 39, 50, sizeof(::xDB::DBDefinition)},
+  { 56, -1, sizeof(::xDB::DBMetadata)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -218,14 +222,15 @@ const char descriptor_table_protodef_db_2eproto[] PROTOBUF_SECTION_VARIABLE(prot
   "\t\022\021\n\tfloat_num\030\004 \001(\001\"P\n\nColumnType\022\016\n\nCO"
   "LUMN_INT\020\000\022\017\n\013COLUMN_CHAR\020\001\022\017\n\013COLUMN_NU"
   "LL\020\003\022\020\n\014COLUMN_FLOAT\020\004\"#\n\003Row\022\034\n\007columns"
-  "\030\001 \003(\0132\013.xDB.Column\"G\n\rTableMetadata\022&\n\013"
+  "\030\001 \003(\0132\013.xDB.Column\"[\n\rTableMetadata\022&\n\013"
   "definitions\030\001 \003(\0132\021.xDB.DBDefinition\022\016\n\006"
-  "nextId\030\002 \001(\004\"\265\001\n\014DBDefinition\022.\n\004type\030\001 "
-  "\001(\0162 .xDB.DBDefinition.DefinitionType\022\014\n"
-  "\004name\030\002 \001(\t\022\021\n\tisPrimary\030\003 \001(\010\022\017\n\007isInde"
-  "x\030\004 \001(\010\022\017\n\007charLen\030\005 \001(\004\"2\n\016DefinitionTy"
-  "pe\022\013\n\007INTEGER\020\001\022\010\n\004CHAR\020\002\022\t\n\005FLOAT\020\003\"\034\n\n"
-  "DBMetadata\022\016\n\006tables\030\001 \003(\t"
+  "nextId\030\002 \001(\004\022\022\n\nhasPrimary\030\003 \001(\010\"\307\001\n\014DBD"
+  "efinition\022.\n\004type\030\001 \001(\0162 .xDB.DBDefiniti"
+  "on.DefinitionType\022\014\n\004name\030\002 \001(\t\022\021\n\tisPri"
+  "mary\030\003 \001(\010\022\017\n\007isIndex\030\004 \001(\010\022\017\n\007charLen\030\005"
+  " \001(\004\022\020\n\010nullable\030\006 \001(\010\"2\n\016DefinitionType"
+  "\022\013\n\007INTEGER\020\001\022\010\n\004CHAR\020\002\022\t\n\005FLOAT\020\003\"\034\n\nDB"
+  "Metadata\022\016\n\006tables\030\001 \003(\t"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_db_2eproto_deps[1] = {
 };
@@ -239,7 +244,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_db_
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_db_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_db_2eproto = {
-  false, false, descriptor_table_protodef_db_2eproto, "db.proto", 586,
+  false, false, descriptor_table_protodef_db_2eproto, "db.proto", 624,
   &descriptor_table_db_2eproto_once, descriptor_table_db_2eproto_sccs, descriptor_table_db_2eproto_deps, 6, 0,
   schemas, file_default_instances, TableStruct_db_2eproto::offsets,
   file_level_metadata_db_2eproto, 6, file_level_enum_descriptors_db_2eproto, file_level_service_descriptors_db_2eproto,
@@ -1122,6 +1127,9 @@ class TableMetadata::_Internal {
   static void set_has_nextid(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
+  static void set_has_hasprimary(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
 };
 
 TableMetadata::TableMetadata(::PROTOBUF_NAMESPACE_ID::Arena* arena)
@@ -1136,13 +1144,17 @@ TableMetadata::TableMetadata(const TableMetadata& from)
       _has_bits_(from._has_bits_),
       definitions_(from.definitions_) {
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
-  nextid_ = from.nextid_;
+  ::memcpy(&nextid_, &from.nextid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&hasprimary_) -
+    reinterpret_cast<char*>(&nextid_)) + sizeof(hasprimary_));
   // @@protoc_insertion_point(copy_constructor:xDB.TableMetadata)
 }
 
 void TableMetadata::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_TableMetadata_db_2eproto.base);
-  nextid_ = PROTOBUF_ULONGLONG(0);
+  ::memset(&nextid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&hasprimary_) -
+      reinterpret_cast<char*>(&nextid_)) + sizeof(hasprimary_));
 }
 
 TableMetadata::~TableMetadata() {
@@ -1177,7 +1189,12 @@ void TableMetadata::Clear() {
   (void) cached_has_bits;
 
   definitions_.Clear();
-  nextid_ = PROTOBUF_ULONGLONG(0);
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    ::memset(&nextid_, 0, static_cast<size_t>(
+        reinterpret_cast<char*>(&hasprimary_) -
+        reinterpret_cast<char*>(&nextid_)) + sizeof(hasprimary_));
+  }
   _has_bits_.Clear();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
@@ -1208,6 +1225,14 @@ const char* TableMetadata::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
           _Internal::set_has_nextid(&has_bits);
           nextid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional bool hasPrimary = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_hasprimary(&has_bits);
+          hasprimary_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1255,6 +1280,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(2, this->_internal_nextid(), target);
   }
 
+  // optional bool hasPrimary = 3;
+  if (cached_has_bits & 0x00000002u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(3, this->_internal_hasprimary(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1278,14 +1309,21 @@ size_t TableMetadata::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
-  // optional uint64 nextId = 2;
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000001u) {
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
-        this->_internal_nextid());
-  }
+  if (cached_has_bits & 0x00000003u) {
+    // optional uint64 nextId = 2;
+    if (cached_has_bits & 0x00000001u) {
+      total_size += 1 +
+        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+          this->_internal_nextid());
+    }
 
+    // optional bool hasPrimary = 3;
+    if (cached_has_bits & 0x00000002u) {
+      total_size += 1 + 1;
+    }
+
+  }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
         _internal_metadata_, total_size, &_cached_size_);
@@ -1318,8 +1356,15 @@ void TableMetadata::MergeFrom(const TableMetadata& from) {
   (void) cached_has_bits;
 
   definitions_.MergeFrom(from.definitions_);
-  if (from._internal_has_nextid()) {
-    _internal_set_nextid(from._internal_nextid());
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x00000003u) {
+    if (cached_has_bits & 0x00000001u) {
+      nextid_ = from.nextid_;
+    }
+    if (cached_has_bits & 0x00000002u) {
+      hasprimary_ = from.hasprimary_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -1346,7 +1391,12 @@ void TableMetadata::InternalSwap(TableMetadata* other) {
   _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   definitions_.InternalSwap(&other->definitions_);
-  swap(nextid_, other->nextid_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TableMetadata, hasprimary_)
+      + sizeof(TableMetadata::hasprimary_)
+      - PROTOBUF_FIELD_OFFSET(TableMetadata, nextid_)>(
+          reinterpret_cast<char*>(&nextid_),
+          reinterpret_cast<char*>(&other->nextid_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata TableMetadata::GetMetadata() const {
@@ -1362,7 +1412,7 @@ class DBDefinition::_Internal {
  public:
   using HasBits = decltype(std::declval<DBDefinition>()._has_bits_);
   static void set_has_type(HasBits* has_bits) {
-    (*has_bits)[0] |= 16u;
+    (*has_bits)[0] |= 32u;
   }
   static void set_has_name(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
@@ -1375,6 +1425,9 @@ class DBDefinition::_Internal {
   }
   static void set_has_charlen(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
+  }
+  static void set_has_nullable(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
   }
 };
 
@@ -1403,8 +1456,8 @@ void DBDefinition::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_DBDefinition_db_2eproto.base);
   name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   ::memset(&charlen_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&isindex_) -
-      reinterpret_cast<char*>(&charlen_)) + sizeof(isindex_));
+      reinterpret_cast<char*>(&nullable_) -
+      reinterpret_cast<char*>(&charlen_)) + sizeof(nullable_));
   type_ = 1;
 }
 
@@ -1444,10 +1497,10 @@ void DBDefinition::Clear() {
   if (cached_has_bits & 0x00000001u) {
     name_.ClearNonDefaultToEmpty();
   }
-  if (cached_has_bits & 0x0000001eu) {
+  if (cached_has_bits & 0x0000003eu) {
     ::memset(&charlen_, 0, static_cast<size_t>(
-        reinterpret_cast<char*>(&isindex_) -
-        reinterpret_cast<char*>(&charlen_)) + sizeof(isindex_));
+        reinterpret_cast<char*>(&nullable_) -
+        reinterpret_cast<char*>(&charlen_)) + sizeof(nullable_));
     type_ = 1;
   }
   _has_bits_.Clear();
@@ -1510,6 +1563,14 @@ const char* DBDefinition::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_I
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
+      // optional bool nullable = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 48)) {
+          _Internal::set_has_nullable(&has_bits);
+          nullable_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
       default: {
       handle_unusual:
         if ((tag & 7) == 4 || tag == 0) {
@@ -1541,7 +1602,7 @@ failure:
 
   cached_has_bits = _has_bits_[0];
   // optional .xDB.DBDefinition.DefinitionType type = 1;
-  if (cached_has_bits & 0x00000010u) {
+  if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
       1, this->_internal_type(), target);
@@ -1575,6 +1636,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(5, this->_internal_charlen(), target);
   }
 
+  // optional bool nullable = 6;
+  if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(6, this->_internal_nullable(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1592,7 +1659,7 @@ size_t DBDefinition::ByteSizeLong() const {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000003fu) {
     // optional string name = 2;
     if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
@@ -1617,8 +1684,13 @@ size_t DBDefinition::ByteSizeLong() const {
       total_size += 1 + 1;
     }
 
-    // optional .xDB.DBDefinition.DefinitionType type = 1;
+    // optional bool nullable = 6;
     if (cached_has_bits & 0x00000010u) {
+      total_size += 1 + 1;
+    }
+
+    // optional .xDB.DBDefinition.DefinitionType type = 1;
+    if (cached_has_bits & 0x00000020u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_type());
     }
@@ -1656,7 +1728,7 @@ void DBDefinition::MergeFrom(const DBDefinition& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x0000001fu) {
+  if (cached_has_bits & 0x0000003fu) {
     if (cached_has_bits & 0x00000001u) {
       _internal_set_name(from._internal_name());
     }
@@ -1670,6 +1742,9 @@ void DBDefinition::MergeFrom(const DBDefinition& from) {
       isindex_ = from.isindex_;
     }
     if (cached_has_bits & 0x00000010u) {
+      nullable_ = from.nullable_;
+    }
+    if (cached_has_bits & 0x00000020u) {
       type_ = from.type_;
     }
     _has_bits_[0] |= cached_has_bits;
@@ -1700,8 +1775,8 @@ void DBDefinition::InternalSwap(DBDefinition* other) {
   swap(_has_bits_[0], other->_has_bits_[0]);
   name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), GetArena());
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(DBDefinition, isindex_)
-      + sizeof(DBDefinition::isindex_)
+      PROTOBUF_FIELD_OFFSET(DBDefinition, nullable_)
+      + sizeof(DBDefinition::nullable_)
       - PROTOBUF_FIELD_OFFSET(DBDefinition, charlen_)>(
           reinterpret_cast<char*>(&charlen_),
           reinterpret_cast<char*>(&other->charlen_));

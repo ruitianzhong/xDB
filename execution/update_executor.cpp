@@ -106,6 +106,11 @@ namespace xDB {
                     column.set_integer_num(value.getInteger());
                     column.clear_str();
                 } else if (value.getType() == ScalarNULL) {
+                    if (const auto &def = metadata.definitions(index); !def.nullable()) {
+                        std::cout << "Column " << def.name() << " can not be null" << std::endl;
+                        return;
+                    }
+
                     column.set_type(Column::COLUMN_NULL);
                     column.clear_str();
                 } else {
