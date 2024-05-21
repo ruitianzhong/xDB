@@ -26,7 +26,7 @@ using namespace xDB;
 %token UPDATE SET DROP JOIN INNER OUTER LEFT
 %token RIGHT INT INTEGER VARCHAR AS BETWEEN
 %token DELETE IS NOT NULL CHAR
-%token  INSERT
+%token INSERT FLOAT
 %token<float_val> FLOATVAL
 %token IF EXISTS EQUALS NOTEQUALS GREATEQ LESSEQ AND OR
 %token<str> IDENTIFIER STRING
@@ -337,6 +337,7 @@ type
 : CHAR '(' INTVAL ')' { $$ = new CharDefinition(CHAR,$3); }
 | INT { $$ = new DataDefinition(INTEGER); }
 | INTEGER { $$ = new DataDefinition(INTEGER); }
+| FLOAT { $$ =  new DataDefinition(FLOAT); }
 
  /****** INSERT statement ******/
 
