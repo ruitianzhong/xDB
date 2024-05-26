@@ -10,11 +10,6 @@ namespace xDB {
     AbstractExpProcessor::AbstractExpProcessor(ExecutionContext context): context_(std::move(context)) {
     }
 
-    bool ExpEvaluator::process(BetweenExpr *between_expr) {
-        std::cout << "between is not supported yet" << std::endl;
-        return false;
-    }
-
     bool AbstractExpProcessor::process(ScalarExp *scalar_exp) {
         return true;
     }

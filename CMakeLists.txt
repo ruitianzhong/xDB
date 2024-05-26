@@ -65,6 +65,7 @@ add_executable(${PROJECT_NAME} main.cpp
         execution/processor/visit_exp.cpp
         execution/processor/exp_checker.cpp
         include/version.h
+        execution/processor/between_evaluator.cpp
 )
 
 add_custom_command(

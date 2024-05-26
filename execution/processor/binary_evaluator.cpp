@@ -35,7 +35,6 @@ namespace xDB {
                 }
                 result = lv / rv;
                 break;
-
             case BinarySub:
                 result = lv - rv;
                 break;

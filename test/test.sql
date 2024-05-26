@@ -73,6 +73,11 @@ insert into t5 values (1),(2);
 -- column id can not be null
 insert into t5 values (NULL);
 
+-- between expression
+create table t6 (id int,str char(20));
+insert into t6 values (1,'abc'),(2,'bcd'),(3,'efg'),(4,'hij');
+select * from t6 where id between 2 and 4;
+select * from t6 where 3 between id and 4;
 
 -- show
 show databases;

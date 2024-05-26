@@ -4,7 +4,7 @@
 //
 #include "sql/table.h"
 
-#include <assert.h>
+#include <cassert>
 
 namespace xDB {
     DataDefinition::DataDefinition(DataType type_): type(type_), data_name(nullptr), constraints(nullptr) {
