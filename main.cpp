@@ -39,14 +39,7 @@ void printInfo() {
 }
 
 
-void signal_handler(int sig) {
-    std::cout << std::endl << "xDB> ";
-    std::fflush(stdout);
-}
-
 void setup_signal() {
-    // register SIGINT handler
-    signal(SIGINT, signal_handler);
 }
 
 bool getLine(bool debug, std::string &s, const std::string &prompt) {
@@ -75,7 +68,11 @@ void read_loop() {
             auto prompt = firstline ? "xDB> " : "   -> ";
             std::string q;
             if (!getLine(FLAGS_disable_line_editing, q, prompt)) {
-                return;
+                pending_no_blank_query.clear();
+                pending_query.clear();
+                count = 0;
+                firstline = true;
+                continue;
             }
             std::string final_query;
             std::string final_no_blank_query;
@@ -135,7 +132,7 @@ void read_loop() {
 
 
 int main(int argc, char **argv) {
-    gflags::SetUsageMessage("--filepath=FILEPATH execute sql file\n --disable_line_edit\n ");
+    gflags::SetUsageMessage("--filepath=FILEPATH execute sql file\n     --disable_line_edit\n ");
     gflags::ParseCommandLineFlags(&argc, &argv, true);
     printInfo();
     setup_signal();

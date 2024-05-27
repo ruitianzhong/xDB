@@ -94,7 +94,7 @@ namespace xDB {
                 auto valuetype = value.getType();
                 Column column = row.column(index);
                 if (type == DBDefinition::CHAR && valuetype == ScalarChar) {
-                    if (static_cast<google::protobuf::int64>(value.getChar().length()) > metadata.definitions(index).
+                    if (value.getChar().length() > metadata.definitions(index).
                         charlen()) {
                         std::cout << value.getChar() << " is too long" << std::endl;
                         return;

@@ -73,7 +73,6 @@ using namespace xDB;
 
 
 /* Unary Operator */
-%left '(' ')'
 %left '.'
 %left '[' ']'
 %left JOIN
@@ -512,5 +511,5 @@ int wrapped_parse(const char*text, ParserResult * result){
 }
 
 int yyerror(yyscan_t scanner,ParserResult * result ,const char *msg) {
-    fprintf(stderr, "[SQL-Lexer-Error] %s\n",msg);return 0;
+    fprintf(stderr, "[SQL-Error] %s\n",msg);return 0;
 }

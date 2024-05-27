@@ -1,6 +1,6 @@
 # xDB
 
-A DBMS implemented for Xidian University‘s compiler course
+A DBMS implemented for Xidian University‘s compiler course.
 
 ## Build
 
@@ -22,6 +22,18 @@ sudo apt-get install libgflags-dev libzstd-dev libsnappy-dev zlib1g-dev libbz2-d
 sudo apt-get install libprotobuf-dev protobuf-compiler
 ```
 
+## Features
+
+* Expression evaluation(Nested)
+* SQL comment
+* `NOT NULL` column constraint
+* Datatype: `INT`, `FLOAT`, `CHAR(N)`
+* Multi-line support
+* sql file execution
+* Line editing and sql history
+* Select multiple tables
+* Based on persistent key-value storage(built upon LSM-Tree)
+
 ## Supported SQL (Example)
 
 ```sql
@@ -29,10 +41,12 @@ CREATE DATABASE example;
 USE example;
 CREATE TABLE user (id int);
 SHOW TABLES;
-INSERT INTO user (id) VALUES (1);
+INSERT INTO user (id NOT NULL) VALUES (1);
 SELECT id from user WHERE id = 42;
 UPDATE user SET id=1 WHERE id=42;
 DELETE FROM user WHERE id=42;
+SELECT * from user where id=(1+2*2+(id=id)+id^id+id) AND id = id%2 AND id IS NOT NULL;
+select * from t1  where id is not null;
 DROP TABLE user;
 ```
 
@@ -68,7 +82,7 @@ make -j4
 
 ## Run
 
-Start xDB interactive shell (interactive mode) 
+Start xDB interactive shell (interactive mode)
 
 ```shell
 # Assuming you are in build directory

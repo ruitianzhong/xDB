@@ -276,4 +276,17 @@ We should use public inheritance here.
 
 ### Token Precedence and Associativity
 
-[Useful article ](https://cloud.tencent.com/developer/article/2190364)
+[Article on token precedence and associativity ](https://cloud.tencent.com/developer/article/2190364)
+
+### Matching Rule in Flex (Scanner)
+
+If it finds more than one match, it takes the one matching the most text (for trailing context
+rules, this includes the length of the trailing part, even though it
+will then be returned to the input). If it finds two or more matches of
+the same length, the rule listed first in the 'flex' input file is
+chosen.
+
+### Buffer in Flex
+
+It should be noted that some characters may exist in flex's buffer when parser error occur in `bison`
+

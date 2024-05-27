@@ -1,15 +1,6 @@
 syntax = "proto2";
 package xDB;
 
-message Person{
-  optional string name = 1;
-  optional int32 id = 2;
-  enum PersonType{
-    STUDENT = 0;
-  }
-}
-
-
 message Column{
   enum ColumnType{
     COLUMN_INT = 0;
